@@ -1,0 +1,36 @@
+/* ════════════════════════════════════════
+   questions/hp.js — Harry Potter
+   30 questions
+   ════════════════════════════════════════ */
+QUESTIONS.hp = [
+  {q:"Dans quelle maison est Harry ?",a:["Serdaigle","Serpentard","Gryffondor","Poufsouffle"],c:2,f:""},
+  {q:"Quel est le prénom du professeur Dumbledore ?",a:["Albert","Albus","Adrian","Arthur"],c:1,f:""},
+  {q:"Quel est le sport joué sur balais volants ?",a:["Bludger","Quidditch","Nimbus","Cognard"],c:1,f:""},
+  {q:"Comment s'appelle la banque des sorciers ?",a:["Gringotts","Ollivander","Azkaban","Durmstrang"],c:0,f:""},
+  {q:"Quel est le prénom du meilleur ami masculin de Harry ?",a:["Ron","Fred","Percy","George"],c:0,f:""},
+  {q:"Quel professeur enseigne les potions lors des premiers livres ?",a:["Lupin","Rogue","McGonagall","Flitwick"],c:1,f:""},
+  {q:"Comment s'appelle l'elfe de maison ami de Harry ?",a:["Kreattur","Dobby","Winky","Hokey"],c:1,f:""},
+  {q:"Quel est le nom de la prison des sorciers ?",a:["Durmstrang","Azkaban","Beauxbâtons","Godric's Hollow"],c:1,f:""},
+  {q:"Quel objet Harry reçoit-il de son père ?",a:["Une baguette","Une cape d'invisibilité","Un balai","Une carte magique"],c:1,f:""},
+  {q:"Quel monstre vit dans la Chambre des Secrets ?",a:["Un basilic","Un dragon","Un troll","Un hippogriffe"],c:0,f:""},
+  {q:"Quel sort sert à désarmer un adversaire ?",a:["Expelliarmus","Lumos","Stupefix","Alohomora"],c:0,f:""},
+  {q:"Quel est le nom complet de Voldemort ?",a:["Tom Elvis Jedusor","Tom Marvolo Jedusor","Tom Marcus Jedusor","Tom Magnus Jedusor"],c:1,f:""},
+  {q:"Comment s'appelle la carte magique montrant Poudlard ?",a:["Carte de Merlin","Carte des Maraudeurs","Carte du Ministère","Carte du Phénix"],c:1,f:""},
+  {q:"Quel est le prénom de la sœur de Ron ?",a:["Luna","Ginny","Molly","Cho"],c:1,f:""},
+  {q:"Comment s'appelle le garde-chasse de Poudlard ?",a:["Hagrid","Lupin","Sirius","Kingsley"],c:0,f:""},
+  {q:"Quelle créature garde la banque Gringotts ?",a:["Les gobelins","Les elfes","Les trolls","Les géants"],c:0,f:""},
+  {q:"Quel est le nom du chien à trois têtes ?",a:["Touffu","Crockdur","Norbert","Aragog"],c:0,f:""},
+  {q:"Qui est le parrain de Harry ?",a:["Lupin","Sirius Black","Hagrid","Arthur Weasley"],c:1,f:""},
+  {q:"Quelle maison valorise le courage ?",a:["Serdaigle","Gryffondor","Serpentard","Poufsouffle"],c:1,f:""},
+  {q:"Quel professeur enseigne la divination ?",a:["Trelawney","Bibine","Vector","Chourave"],c:0,f:""},
+  {q:"Comment s'appelle le phénix de Dumbledore ?",a:["Fumseck","Hedwige","Nagini","Aragog"],c:0,f:""},
+  {q:"Quel est le prénom de Malfoy ?",a:["Draco","Lucius","Scorpius","Antonin"],c:0,f:""},
+  {q:"Quelle créature est Aragog ?",a:["Un serpent géant","Une araignée géante","Un dragon","Un basilic"],c:1,f:""},
+  {q:"Quel animal est l'animal de compagnie de Hermione ?",a:["Un hibou","Un crapaud","Un chat","Un rat"],c:2,f:""},
+  {q:"Quel objet permet de voir les souvenirs ?",a:["Le Miroir du Riséd","La Pensine","Le Retourneur de Temps","La Coupe de Feu"],c:1,f:""},
+  {q:"Quelle école participe au Tournoi des Trois Sorciers avec Poudlard ?",a:["Ilvermorny","Beauxbâtons","Castelobruxo","Mahoutokoro"],c:1,f:""},
+  {q:"Quel animal est l'animal de compagnie de Ron ?",a:["Un hibou","Un crapaud","Un chat","Un rat"],c:3,f:""},
+  {q:"Quel sort permet d'allumer sa baguette ?",a:["Expelliarmus","Lumos","Nox","Alohomora"],c:1,f:""},
+  {q:"Comment s'appelle le journal possédé par Voldemort ?",a:["Horcruxe journal","Journal de Jedusor","Carnet noir","Livre des secrets"],c:1,f:""},
+  {q:"Quelle maison valorise la loyauté et le travail ?",a:["Serdaigle","Gryffondor","Serpentard","Poufsouffle"],c:3,f:""},
+];
