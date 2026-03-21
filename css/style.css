@@ -1,0 +1,103 @@
+/* ════════════════════════════════════════════
+   style.css — BUZZ! Quiz
+   Contient : reset, animations, composants UI
+   ════════════════════════════════════════════ */
+
+/* ── Reset ── */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
+html,body { height:100%; font-family:'Poppins',sans-serif; background:#0f0f1a; color:white; overflow-x:hidden }
+#app { min-height:100vh }
+
+/* ── Animations ── */
+@keyframes floatY     { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+@keyframes popIn      { 0%{transform:scale(.4);opacity:0} 70%{transform:scale(1.08)} 100%{transform:scale(1);opacity:1} }
+@keyframes sUp        { from{transform:translateY(22px);opacity:0} to{transform:translateY(0);opacity:1} }
+@keyframes twinkle    { 0%,100%{opacity:.1} 50%{opacity:.8} }
+@keyframes spinArc    { to{transform:rotate(360deg)} }
+@keyframes roomGlow   { 0%,100%{letter-spacing:.25em} 50%{letter-spacing:.38em} }
+@keyframes buzzPulse  { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+@keyframes correctPulse { 0%{box-shadow:0 0 0 0 rgba(34,197,94,.7)} 100%{box-shadow:0 0 0 18px rgba(34,197,94,0)} }
+@keyframes wrongShake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+@keyframes fadeIn     { from{opacity:0} to{opacity:1} }
+
+/* ── Classes utilitaires ── */
+.float { animation:floatY 3.5s ease-in-out infinite }
+.pop   { animation:popIn .4s cubic-bezier(.36,.07,.19,.97) both }
+.su    { animation:sUp .32s ease both }
+.fi    { animation:fadeIn .28s ease both }
+
+/* ── Composants ── */
+.glass {
+  background: rgba(255,255,255,.055);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 18px;
+}
+
+.btn {
+  cursor:pointer; border:none;
+  font-family:'Poppins',sans-serif; font-weight:700;
+  border-radius:50px; transition:all .18s;
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:8px; padding:14px 22px; font-size:.95rem;
+}
+.btn:active   { transform:scale(.96) }
+.btn:disabled { opacity:.4; cursor:not-allowed; transform:none }
+
+.sc {
+  position:relative; z-index:1; min-height:100vh;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:18px; gap:14px;
+}
+
+input {
+  background: rgba(255,255,255,.07);
+  border: 1.5px solid rgba(255,255,255,.17);
+  color: white; border-radius:12px;
+  padding:12px 15px; font-family:'Poppins',sans-serif;
+  font-size:.93rem; outline:none; width:100%;
+  transition: border-color .18s;
+}
+input:focus       { border-color:rgba(255,255,255,.42) }
+input::placeholder { color:rgba(255,255,255,.3) }
+
+/* ── Boutons de réponse ── */
+.ab {
+  width:100%; padding:13px 15px; border-radius:13px;
+  border:2px solid rgba(255,255,255,.13);
+  background:rgba(255,255,255,.04); color:white;
+  font-family:'Poppins',sans-serif; font-size:.88rem; font-weight:600;
+  text-align:left; cursor:pointer;
+  display:flex; align-items:center; gap:10px;
+  transition:all .15s; margin-bottom:8px;
+}
+.ab:hover:not([disabled]) { background:rgba(255,255,255,.1); transform:translateX(3px) }
+.ab[disabled]  { cursor:default }
+.ab.ok  { background:rgba(34,197,94,.22)  !important; border-color:#22c55e !important; animation:correctPulse .5s ease }
+.ab.no  { background:rgba(239,68,68,.22)  !important; border-color:#ef4444 !important; animation:wrongShake .35s ease }
+.ab.dim { opacity:.3; background:rgba(255,255,255,.01) !important; border-color:rgba(255,255,255,.05) !important }
+
+.lbl {
+  width:27px; height:27px; border-radius:7px;
+  background:rgba(255,255,255,.1);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:.76rem; flex-shrink:0;
+}
+
+/* ── Couches 3D ── */
+#canvas3d {
+  position:fixed; inset:0; z-index:0;
+  pointer-events:none;
+}
+#fog3d {
+  position:fixed; inset:0; z-index:1;
+  background: radial-gradient(ellipse 120% 60% at 50% 100%,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,.5) 55%,
+    rgba(0,0,0,.88) 100%
+  );
+  pointer-events:none;
+}
+#bg { position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none }
