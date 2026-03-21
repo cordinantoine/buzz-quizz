@@ -1,5 +1,6 @@
 /* ════════════════════════════════════════
    questions/music.js — Musique
+   30 questions
    ════════════════════════════════════════ */
 QUESTIONS.music = [
   {q:"Quel groupe a chanté la chanson 'Bohemian Rhapsody' ?",a:["The Beatles","Queen","The Rolling Stones","Pink Floyd"],c:1,f:""},
@@ -24,4 +25,12 @@ QUESTIONS.music = [
   {q:"Quel chanteur a interprété 'Someone Like You' ?",a:["Adele","Sam Smith","Lewis Capaldi","Ed Sheeran"],c:0,f:""},
   {q:"Dans quel pays est né Freddie Mercury ?",a:["Royaume-Uni","Inde","Tanzanie","États-Unis"],c:2,f:""},
   {q:"Quel groupe a chanté 'Sweet Child O' Mine' ?",a:["Guns N' Roses","Aerosmith","Metallica","Nirvana"],c:0,f:""},
+  {q:"Combien de notes y a-t-il dans la gamme musicale classique (do à si) ?",a:["5","6","7","8"],c:2,f:""},
+  {q:"Quel instrument utilise des baguettes ?",a:["Piano","Batterie","Harpe","Flûte"],c:1,f:""},
+  {q:"Dans quel genre musical chante Bob Marley ?",a:["Rock","Reggae","Jazz","Soul"],c:1,f:""},
+  {q:"Quel chanteur a chanté 'Thriller' ?",a:["Michael Jackson","Prince","Usher","Bruno Mars"],c:0,f:""},
+  {q:"Combien de cordes possède un violon ?",a:["3","4","5","6"],c:1,f:""},
+  {q:"Quel groupe a chanté 'Stairway to Heaven' ?",a:["Led Zeppelin","Deep Purple","Black Sabbath","The Who"],c:0,f:""},
+  {q:"Quel chanteur est connu pour ses chansons 'Uptown Funk' et '24K Magic' ?",a:["Justin Timberlake","Bruno Mars","Pharrell Williams","The Weeknd"],c:1,f:""},
+  {q:"Dans quel pays est né Elvis Presley ?",a:["Royaume-Uni","Canada","États-Unis","Australie"],c:2,f:""},
 ];
