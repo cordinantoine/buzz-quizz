@@ -1,5 +1,6 @@
 /* ════════════════════════════════════════
    questions/science.js — Sciences
+   30 questions
    ════════════════════════════════════════ */
 QUESTIONS.science = [
   {q:"Quelle planète est la plus proche du Soleil ?",a:["Vénus","Mercure","Terre","Mars"],c:1,f:""},
@@ -12,4 +13,24 @@ QUESTIONS.science = [
   {q:"Quelle est l'étoile la plus proche de la Terre ?",a:["Proxima Centauri","Sirius","Le Soleil","Alpha Centauri"],c:2,f:""},
   {q:"Quelle planète possède les anneaux les plus visibles ?",a:["Jupiter","Saturne","Uranus","Neptune"],c:1,f:""},
   {q:"Quelle est la vitesse approximative de la lumière dans le vide ?",a:["3 000 km/s","30 000 km/s","300 000 km/s","3 000 000 km/s"],c:2,f:""},
+  {q:"Quel est l'os le plus long du corps humain ?",a:["Tibia","Humérus","Fémur","Radius"],c:2,f:""},
+  {q:"Quelle partie de la cellule contient l'ADN ?",a:["Membrane","Cytoplasme","Noyau","Ribosome"],c:2,f:""},
+  {q:"Quel métal liquide trouve-t-on dans les thermomètres traditionnels ?",a:["Fer","Mercure","Aluminium","Cuivre"],c:1,f:""},
+  {q:"Quel organe filtre le sang dans le corps humain ?",a:["Rein","Estomac","Pancréas","Intestin"],c:0,f:""},
+  {q:"Quelle particule possède une charge négative ?",a:["Proton","Neutron","Électron","Photon"],c:2,f:""},
+  {q:"Quel instrument permet d'observer les étoiles ?",a:["Microscope","Télescope","Baromètre","Thermomètre"],c:1,f:""},
+  {q:"Quelle science étudie les tremblements de terre ?",a:["Géologie","Sismologie","Astronomie","Météorologie"],c:1,f:""},
+  {q:"Quel gaz est le plus présent dans l'atmosphère terrestre ?",a:["Oxygène","Azote","Dioxyde de carbone","Hydrogène"],c:1,f:""},
+  {q:"Quelle scientifique a découvert la radioactivité avec Pierre Curie ?",a:["Rosalind Franklin","Marie Curie","Ada Lovelace","Jane Goodall"],c:1,f:""},
+  {q:"Quelle planète est la plus grande du système solaire ?",a:["Saturne","Jupiter","Neptune","Terre"],c:1,f:""},
+  {q:"Quel phénomène provoque les saisons sur Terre ?",a:["Distance au Soleil","Rotation de la Terre","Inclinaison de l'axe de la Terre","Gravité du Soleil"],c:2,f:""},
+  {q:"Quelle molécule transporte l'oxygène dans le sang ?",a:["Insuline","Hémoglobine","Adrénaline","Mélanine"],c:1,f:""},
+  {q:"Quel est le symbole chimique de l'or ?",a:["Ag","Au","Go","Or"],c:1,f:""},
+  {q:"Quel est le symbole chimique du fer ?",a:["Fe","Fr","F","Ir"],c:0,f:""},
+  {q:"Quelle planète est appelée la planète bleue ?",a:["Terre","Neptune","Uranus","Vénus"],c:0,f:""},
+  {q:"Quel organe permet de respirer ?",a:["Foie","Poumon","Rein","Rate"],c:1,f:""},
+  {q:"Quelle est l'unité de mesure de la force ?",a:["Watt","Joule","Newton","Volt"],c:2,f:""},
+  {q:"Quelle science étudie les êtres vivants ?",a:["Chimie","Physique","Biologie","Géographie"],c:2,f:""},
+  {q:"Quelle force attire les objets vers la Terre ?",a:["Électricité","Magnétisme","Gravité","Pression"],c:2,f:""},
+  {q:"Quelle planète est la plus éloignée du Soleil ?",a:["Uranus","Neptune","Saturne","Pluton"],c:1,f:""},
 ];
