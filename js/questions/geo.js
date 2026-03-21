@@ -1,5 +1,6 @@
 /* ════════════════════════════════════════
    questions/geo.js — Géographie
+   30 questions
    ════════════════════════════════════════ */
 QUESTIONS.geo = [
   {q:"Quelle est la capitale de la France ?",a:["Lyon","Marseille","Paris","Toulouse"],c:2,f:""},
@@ -12,4 +13,24 @@ QUESTIONS.geo = [
   {q:"Quel est le plus long fleuve du monde ?",a:["Amazone","Nil","Yangtsé","Mississippi"],c:1,f:""},
   {q:"Quel est le plus haut sommet du monde ?",a:["K2","Mont Everest","Kangchenjunga","Mont Blanc"],c:1,f:""},
   {q:"Quel pays a la forme d'une botte ?",a:["Espagne","Italie","Portugal","Grèce"],c:1,f:""},
+  {q:"Quelle est la capitale de l'Allemagne ?",a:["Munich","Hambourg","Berlin","Cologne"],c:2,f:""},
+  {q:"Sur quel continent se trouve l'Égypte ?",a:["Europe","Asie","Afrique","Amérique"],c:2,f:""},
+  {q:"Quel fleuve traverse la ville de Paris ?",a:["Rhin","Loire","Seine","Rhône"],c:2,f:""},
+  {q:"Quelle est la capitale du Canada ?",a:["Toronto","Montréal","Ottawa","Vancouver"],c:2,f:""},
+  {q:"Quel est le plus grand continent ?",a:["Afrique","Amérique du Nord","Asie","Europe"],c:2,f:""},
+  {q:"Dans quel pays se trouve la ville de Barcelone ?",a:["Portugal","Espagne","Italie","France"],c:1,f:""},
+  {q:"Quel océan borde la côte ouest des États-Unis ?",a:["Atlantique","Pacifique","Indien","Arctique"],c:1,f:""},
+  {q:"Quelle est la capitale du Royaume-Uni ?",a:["Manchester","Liverpool","Londres","Birmingham"],c:2,f:""},
+  {q:"Dans quel pays se trouve la Grande Muraille de Chine ?",a:["Japon","Corée du Sud","Chine","Mongolie"],c:2,f:""},
+  {q:"Quelle est la capitale de l'Espagne ?",a:["Barcelone","Valence","Madrid","Séville"],c:2,f:""},
+  {q:"Sur quel continent se trouve l'Argentine ?",a:["Europe","Afrique","Amérique du Sud","Asie"],c:2,f:""},
+  {q:"Quelle mer borde la côte sud de la France ?",a:["Mer Noire","Mer Méditerranée","Mer Baltique","Mer Rouge"],c:1,f:""},
+  {q:"Quel est le plus grand lac d'Afrique ?",a:["Lac Tanganyika","Lac Victoria","Lac Malawi","Lac Tchad"],c:1,f:""},
+  {q:"Quelle est la capitale des États-Unis ?",a:["New York","Los Angeles","Washington D.C.","Chicago"],c:2,f:""},
+  {q:"Dans quel pays se trouve la ville de Dubaï ?",a:["Qatar","Émirats arabes unis","Oman","Arabie saoudite"],c:1,f:""},
+  {q:"Quelle est la capitale de l'Australie ?",a:["Sydney","Melbourne","Canberra","Perth"],c:2,f:""},
+  {q:"Quel fleuve traverse l'Égypte ?",a:["Amazone","Nil","Yangtsé","Danube"],c:1,f:""},
+  {q:"Dans quel pays se trouve la ville de Rio de Janeiro ?",a:["Argentine","Brésil","Mexique","Pérou"],c:1,f:""},
+  {q:"Quelle est la capitale de l'Italie ?",a:["Milan","Venise","Florence","Rome"],c:3,f:""},
+  {q:"Dans quel pays se trouve la ville de Bangkok ?",a:["Vietnam","Thaïlande","Cambodge","Laos"],c:1,f:""},
 ];
