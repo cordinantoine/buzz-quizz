@@ -1,0 +1,27 @@
+/* ════════════════════════════════════════
+   questions/music.js — Musique
+   ════════════════════════════════════════ */
+QUESTIONS.music = [
+  {q:"Quel groupe a chanté la chanson 'Bohemian Rhapsody' ?",a:["The Beatles","Queen","The Rolling Stones","Pink Floyd"],c:1,f:""},
+  {q:"Quel chanteur est surnommé 'The King of Pop' ?",a:["Prince","Elvis Presley","Michael Jackson","Stevie Wonder"],c:2,f:""},
+  {q:"Quel instrument possède généralement 6 cordes ?",a:["Violon","Guitare","Harpe","Piano"],c:1,f:""},
+  {q:"Qui a composé la 9e symphonie ?",a:["Johann Sebastian Bach","Ludwig van Beethoven","Wolfgang Amadeus Mozart","Franz Schubert"],c:1,f:""},
+  {q:"Quel groupe a chanté 'Hey Jude' ?",a:["The Rolling Stones","The Beatles","Queen","Oasis"],c:1,f:""},
+  {q:"Quel chanteur a interprété 'Shape of You' ?",a:["Ed Sheeran","Justin Bieber","Shawn Mendes","Sam Smith"],c:0,f:""},
+  {q:"Quel chanteur français est connu pour la chanson 'Je te promets' ?",a:["Florent Pagny","Jean-Jacques Goldman","Johnny Hallyday","Michel Sardou"],c:2,f:""},
+  {q:"Dans quel pays est né Bob Marley ?",a:["États-Unis","Jamaïque","Royaume-Uni","Brésil"],c:1,f:""},
+  {q:"Quel groupe a chanté 'Smells Like Teen Spirit' ?",a:["Nirvana","Metallica","Pearl Jam","Green Day"],c:0,f:""},
+  {q:"Quel chanteur est célèbre pour 'Rocket Man' ?",a:["Elton John","David Bowie","Freddie Mercury","George Michael"],c:0,f:""},
+  {q:"Qui chante 'Rolling in the Deep' ?",a:["Adele","Amy Winehouse","Dua Lipa","Sia"],c:0,f:""},
+  {q:"Quel groupe a chanté 'Hotel California' ?",a:["Eagles","Fleetwood Mac","Aerosmith","Bon Jovi"],c:0,f:""},
+  {q:"Quel groupe a chanté 'Viva La Vida' ?",a:["Coldplay","U2","Imagine Dragons","Muse"],c:0,f:""},
+  {q:"Qui a chanté 'Like a Virgin' ?",a:["Madonna","Whitney Houston","Cyndi Lauper","Cher"],c:0,f:""},
+  {q:"Quel groupe a chanté 'Wonderwall' ?",a:["Blur","Oasis","Radiohead","Arctic Monkeys"],c:1,f:""},
+  {q:"Quel chanteur français est connu pour 'Formidable' ?",a:["Stromae","Orelsan","Vianney","Soprano"],c:0,f:""},
+  {q:"Quel groupe a chanté 'We Will Rock You' ?",a:["Queen","AC/DC","Kiss","Bon Jovi"],c:0,f:""},
+  {q:"Qui chante 'Bad Romance' ?",a:["Katy Perry","Lady Gaga","Rihanna","Beyoncé"],c:1,f:""},
+  {q:"Quel groupe est connu pour 'Another Brick in the Wall' ?",a:["Pink Floyd","Deep Purple","Genesis","Yes"],c:0,f:""},
+  {q:"Quel chanteur a interprété 'Someone Like You' ?",a:["Adele","Sam Smith","Lewis Capaldi","Ed Sheeran"],c:0,f:""},
+  {q:"Dans quel pays est né Freddie Mercury ?",a:["Royaume-Uni","Inde","Tanzanie","États-Unis"],c:2,f:""},
+  {q:"Quel groupe a chanté 'Sweet Child O' Mine' ?",a:["Guns N' Roses","Aerosmith","Metallica","Nirvana"],c:0,f:""},
+];
