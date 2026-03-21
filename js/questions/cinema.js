@@ -1,5 +1,6 @@
 /* ════════════════════════════════════════
    questions/cinema.js — Cinéma / Séries
+   30 questions
    ════════════════════════════════════════ */
 QUESTIONS.cinema = [
   {q:"Qui a réalisé le film Titanic ?",a:["Steven Spielberg","James Cameron","Ridley Scott","Christopher Nolan"],c:1,f:""},
@@ -17,4 +18,19 @@ QUESTIONS.cinema = [
   {q:"Quel film raconte l'histoire d'un clown terrifiant nommé Pennywise ?",a:["The Conjuring","It","The Nun","Annabelle"],c:1,f:""},
   {q:"Quel acteur joue Wolverine dans les films X-Men ?",a:["Hugh Jackman","Chris Evans","Ryan Reynolds","Chris Pratt"],c:0,f:""},
   {q:"Quel film raconte l'histoire d'un homme qui revit la même journée sans cesse ?",a:["Groundhog Day","Edge of Tomorrow","Looper","Source Code"],c:0,f:""},
+  {q:"Dans quelle série trouve-t-on le personnage de Ragnar Lothbrok ?",a:["Vikings","The Last Kingdom","Game of Thrones","Barbarians"],c:0,f:""},
+  {q:"Quel film met en scène un parc virtuel nommé OASIS ?",a:["Tron: Legacy","Ready Player One","Inception","Minority Report"],c:1,f:""},
+  {q:"Dans quelle série se déroule un braquage de la Monnaie d'Espagne ?",a:["Narcos","Money Heist","Ozark","Lupin"],c:1,f:""},
+  {q:"Quel film raconte l'histoire d'un astronaute seul sur Mars ?",a:["Gravity","Interstellar","The Martian","Apollo 13"],c:2,f:""},
+  {q:"Dans quelle série suit-on un gentleman cambrioleur inspiré d'Arsène Lupin ?",a:["Lupin","Sherlock","Narcos","Money Heist"],c:0,f:""},
+  {q:"Quel acteur joue Batman dans la trilogie de Christopher Nolan ?",a:["Ben Affleck","Christian Bale","Michael Keaton","Val Kilmer"],c:1,f:""},
+  {q:"Dans quel film trouve-t-on la phrase 'Que la Force soit avec toi' ?",a:["Star Trek","Star Wars","Dune","Avatar"],c:1,f:""},
+  {q:"Quelle série raconte la vie d'un groupe d'amis à New York ?",a:["How I Met Your Mother","Friends","New Girl","The Big Bang Theory"],c:1,f:""},
+  {q:"Dans quelle série trouve-t-on Sheldon Cooper ?",a:["Young Sheldon","The Big Bang Theory","Silicon Valley","Community"],c:1,f:""},
+  {q:"Quel film d'animation met en scène un robot nommé WALL-E ?",a:["Robots","WALL-E","Big Hero 6","The Iron Giant"],c:1,f:""},
+  {q:"Dans quelle série suit-on un groupe de survivants après une apocalypse zombie ?",a:["The Last of Us","The Walking Dead","Black Summer","Z Nation"],c:1,f:""},
+  {q:"Quel film raconte l'histoire de jouets qui prennent vie ?",a:["Small Soldiers","Toy Story","The Lego Movie","Antz"],c:1,f:""},
+  {q:"Quel acteur joue le rôle principal dans Forrest Gump ?",a:["Tom Cruise","Tom Hanks","Kevin Costner","Mel Gibson"],c:1,f:""},
+  {q:"Dans quelle série suit-on les aventures d'un chimiste devenu trafiquant ?",a:["Narcos","Breaking Bad","Ozark","Better Call Saul"],c:1,f:""},
+  {q:"Quel film met en scène des superhéros réunis pour la première fois dans l'univers Marvel ?",a:["Captain America","Thor","The Avengers","Iron Man"],c:2,f:""},
 ];
