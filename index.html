@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <title>BUZZ! Quiz</title>
+
+  <!-- Polices Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Orbitron:wght@700;900&family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+  <!-- COUCHE 0 : Scène Three.js (z-index: 0) -->
+  <canvas id="canvas3d"></canvas>
+
+  <!-- COUCHE 1 : Fondu de profondeur -->
+  <div id="fog3d"></div>
+
+  <!-- COUCHE 2 : Étoiles CSS legacy pour certains thèmes -->
+  <div id="bg"></div>
+
+  <!-- COUCHE 3 : Interface du jeu (z-index: 2+) -->
+  <div id="app"></div>
+
+  <!--
+    ════════════════════════════════════════
+    ORDRE DE CHARGEMENT DES SCRIPTS
+    L'ordre est important : chaque fichier
+    dépend des précédents.
+    ════════════════════════════════════════
+
+    1. Three.js        → moteur 3D
+    2. config.js       → constantes globales (THEMES, RT, COL…)
+    3. firebase.js     → communication temps réel (fg, fs, fp…)
+    4. questions.js    → banque de questions + getStaticQs()
+    5. scene3d.js      → scène 3D, personnage, animations
+    6. game.js         → logique du jeu (rounds, buzz, scores…)
+    7. ui.js           → affichage (Home, drawQ, drawScore…)
+  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/firebase.js"></script>
+  <script src="js/questions.js"></script>
+  <script src="js/scene3d.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/ui.js"></script>
+
+</body>
+</html>
