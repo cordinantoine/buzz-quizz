@@ -1,5 +1,6 @@
 /* ════════════════════════════════════════
    questions/histoire.js — Histoire
+   30 questions
    ════════════════════════════════════════ */
 QUESTIONS.histoire = [
   {q:"Qui était le premier empereur des Français ?",a:["Louis XIV","Napoleon Bonaparte","Louis XVI","Charles de Gaulle"],c:1,f:""},
@@ -12,4 +13,24 @@ QUESTIONS.histoire = [
   {q:"Qui était le chef de l'Allemagne nazie pendant la Seconde Guerre mondiale ?",a:["Adolf Hitler","Benito Mussolini","Joseph Staline","Francisco Franco"],c:0,f:""},
   {q:"En quelle année l'homme a-t-il marché sur la Lune pour la première fois ?",a:["1965","1969","1971","1975"],c:1,f:""},
   {q:"Quelle bataille célèbre a marqué la défaite finale de Napoléon ?",a:["Austerlitz","Waterloo","Trafalgar","Leipzig"],c:1,f:""},
+  {q:"Qui était le président des États-Unis pendant la guerre de Sécession ?",a:["George Washington","Abraham Lincoln","Thomas Jefferson","Theodore Roosevelt"],c:1,f:""},
+  {q:"Quel événement a déclenché la Première Guerre mondiale ?",a:["Invasion de la Pologne","Assassinat de l'archiduc François-Ferdinand","Traité de Versailles","Révolution russe"],c:1,f:""},
+  {q:"Quel traité a mis fin à la Première Guerre mondiale ?",a:["Traité de Rome","Traité de Versailles","Traité de Vienne","Traité de Tordesillas"],c:1,f:""},
+  {q:"Quel célèbre pharaon possédait un tombeau découvert en 1922 ?",a:["Ramsès II","Toutankhamon","Akhenaton","Thoutmôsis III"],c:1,f:""},
+  {q:"Quelle guerre opposa les États-Unis et le Vietnam ?",a:["Guerre de Corée","Guerre du Vietnam","Guerre froide","Guerre du Golfe"],c:1,f:""},
+  {q:"Qui était le premier président de la Ve République française ?",a:["Georges Pompidou","Charles de Gaulle","François Mitterrand","Valéry Giscard d'Estaing"],c:1,f:""},
+  {q:"Quelle catastrophe nucléaire a eu lieu en 1986 en Ukraine ?",a:["Fukushima","Tchernobyl","Three Mile Island","Hiroshima"],c:1,f:""},
+  {q:"Qui a dirigé l'Inde vers l'indépendance avec une stratégie non violente ?",a:["Jawaharlal Nehru","Mahatma Gandhi","Indira Gandhi","Subhas Chandra Bose"],c:1,f:""},
+  {q:"Quel pays était dirigé par Benito Mussolini ?",a:["Espagne","Allemagne","Italie","Portugal"],c:2,f:""},
+  {q:"Quelle organisation internationale a été créée en 1945 pour maintenir la paix ?",a:["OTAN","Nations Unies","Union européenne","Ligue arabe"],c:1,f:""},
+  {q:"Quel empire était dirigé par Jules César ?",a:["Empire grec","Empire romain","Empire byzantin","Empire perse"],c:1,f:""},
+  {q:"Quelle reine d'Égypte était célèbre pour sa relation avec Jules César ?",a:["Néfertiti","Cléopâtre","Hatchepsout","Arsinoé"],c:1,f:""},
+  {q:"Quelle civilisation a construit Machu Picchu ?",a:["Mayas","Aztèques","Incas","Olmèques"],c:2,f:""},
+  {q:"Quel empire dominait une grande partie de l'Europe au Moyen Âge avec Charlemagne ?",a:["Empire byzantin","Empire carolingien","Empire ottoman","Empire romain"],c:1,f:""},
+  {q:"Quel empire était dirigé par les sultans à Istanbul ?",a:["Empire romain","Empire perse","Empire ottoman","Empire mongol"],c:2,f:""},
+  {q:"Qui était le chef de l'URSS pendant la majeure partie de la Seconde Guerre mondiale ?",a:["Vladimir Lénine","Joseph Staline","Léon Trotski","Mikhail Gorbatchev"],c:1,f:""},
+  {q:"Quelle guerre froide opposa l'Est et l'Ouest pendant plusieurs décennies après 1945 ?",a:["Guerre de Corée","Guerre froide","Guerre du Vietnam","Guerre du Golfe"],c:1,f:""},
+  {q:"En quelle année la Bastille a-t-elle été prise d'assaut ?",a:["1787","1789","1791","1793"],c:1,f:""},
+  {q:"Quel roi de France fut guillotiné pendant la Révolution française ?",a:["Louis XIV","Louis XV","Louis XVI","Louis XVIII"],c:2,f:""},
+  {q:"Quel navigateur portugais a été le premier à circumnaviguer le globe ?",a:["Vasco da Gama","Christophe Colomb","Ferdinand Magellan","Bartolomeu Dias"],c:2,f:""},
 ];
