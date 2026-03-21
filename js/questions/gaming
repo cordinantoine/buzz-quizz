@@ -1,0 +1,36 @@
+/* ════════════════════════════════════════
+   questions/gaming.js — Jeux Vidéo
+   30 questions
+   ════════════════════════════════════════ */
+QUESTIONS.gaming = [
+  {q:"Quel personnage est le héros principal de la série Super Mario Bros. ?",a:["Luigi","Mario","Bowser","Toad"],c:1,f:""},
+  {q:"Dans quel jeu trouve-t-on le personnage de Link ?",a:["Final Fantasy VII","The Legend of Zelda","Dragon Quest","Monster Hunter"],c:1,f:""},
+  {q:"Quel jeu de Mojang Studios consiste à construire avec des blocs ?",a:["Terraria","Minecraft","Roblox","Fortnite"],c:1,f:""},
+  {q:"Quelle entreprise a créé la console PlayStation ?",a:["Nintendo","Microsoft","Sony","Sega"],c:2,f:""},
+  {q:"Quel est le rival principal de Mario dans les jeux Nintendo ?",a:["Yoshi","Bowser","Wario","Donkey Kong"],c:1,f:""},
+  {q:"Quel personnage est la mascotte de Sega ?",a:["Mario","Sonic","Crash","Kirby"],c:1,f:""},
+  {q:"Quelle entreprise développe la série Grand Theft Auto ?",a:["Ubisoft","Rockstar Games","Electronic Arts","Square Enix"],c:1,f:""},
+  {q:"Quel jeu consiste à capturer des créatures et les faire combattre ?",a:["Digimon World","Pokémon","Monster Hunter","Palworld"],c:1,f:""},
+  {q:"Dans quel jeu trouve-t-on le personnage Master Chief ?",a:["Halo","Destiny","Mass Effect","Doom"],c:0,f:""},
+  {q:"Quel jeu de course met en scène Mario et ses amis ?",a:["Forza Horizon","Gran Turismo","Mario Kart","Need for Speed"],c:2,f:""},
+  {q:"Dans quel jeu incarne-t-on Kratos ?",a:["God of War","Devil May Cry","Dark Souls","Diablo"],c:0,f:""},
+  {q:"Quel jeu populaire est un FPS tactique de Riot Games ?",a:["Counter-Strike","Valorant","Rainbow Six Siege","Overwatch"],c:1,f:""},
+  {q:"Dans quel jeu explore-t-on un monde appelé Hyrule ?",a:["The Legend of Zelda","Elden Ring","The Witcher 3","Skyrim"],c:0,f:""},
+  {q:"Quel jeu est célèbre pour la phrase 'Victory Royale' ?",a:["Fortnite","PUBG","Apex Legends","Warzone"],c:0,f:""},
+  {q:"Dans quel jeu combat-on avec des héros comme Tracer et Genji ?",a:["Overwatch","Valorant","League of Legends","Paladins"],c:0,f:""},
+  {q:"Quel jeu est un célèbre MOBA développé par Riot Games ?",a:["Dota 2","League of Legends","Heroes of the Storm","Smite"],c:1,f:""},
+  {q:"Quel jeu se déroule dans la région de Skyrim ?",a:["The Elder Scrolls V: Skyrim","Dragon Age","The Witcher 3","Elden Ring"],c:0,f:""},
+  {q:"Quel jeu propose un monde ouvert avec des cow-boys, développé par Rockstar ?",a:["Red Dead Redemption 2","GTA V","Far Cry 5","Days Gone"],c:0,f:""},
+  {q:"Dans quel jeu incarne-t-on un criminel dans une grande ville ouverte ?",a:["Watch Dogs","Grand Theft Auto V","Sleeping Dogs","Mafia"],c:1,f:""},
+  {q:"Quel jeu consiste à survivre sur une île avec des dinosaures ?",a:["Ark: Survival Evolved","Subnautica","Rust","Green Hell"],c:0,f:""},
+  {q:"Quel jeu propose un monde médiéval très difficile créé par FromSoftware ?",a:["Dark Souls","Dragon Age","Fable","Kingdom Come"],c:0,f:""},
+  {q:"Quel jeu de football est développé par EA Sports ?",a:["eFootball","EA Sports FC","Football Manager","Rocket League"],c:1,f:""},
+  {q:"Dans quel jeu incarne-t-on un chasseur de monstres nommé Geralt ?",a:["Skyrim","The Witcher 3","Dragon Age","Dark Souls"],c:1,f:""},
+  {q:"Quel jeu consiste à construire une ville et gérer ses habitants ?",a:["SimCity","Age of Empires","Civilization VI","Anno 1800"],c:0,f:""},
+  {q:"Sur quelle console joue-t-on à The Legend of Zelda: Breath of the Wild ?",a:["PlayStation 5","Xbox Series X","Nintendo Switch","Steam Deck"],c:2,f:""},
+  {q:"Quel jeu consiste à faire évoluer des civilisations à travers l'histoire ?",a:["Civilization VI","Total War","Age of Empires","Europa Universalis"],c:0,f:""},
+  {q:"Quel jeu propose des parties de battle royale à 100 joueurs ?",a:["Fortnite","PUBG","Apex Legends","Warzone"],c:1,f:""},
+  {q:"Quelle entreprise développe Assassin's Creed ?",a:["Ubisoft","Activision","Valve","Capcom"],c:0,f:""},
+  {q:"Dans quel jeu survit-on dans un monde rempli de zombies cubiques ?",a:["Terraria","Minecraft","DayZ","Rust"],c:1,f:""},
+  {q:"Quel jeu de sport met en scène des voitures jouant au football ?",a:["Forza Horizon","Gran Turismo","Rocket League","Need for Speed"],c:2,f:""},
+];
