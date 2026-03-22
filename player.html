@@ -697,6 +697,21 @@ window.onerror = function(msg, src, line, col, err) {
   return false;
 };
 
+// Vérifier que config.js a bien chargé
+window.addEventListener('DOMContentLoaded', () => {
+  if (typeof THEMES === 'undefined') {
+    const errDiv = document.createElement('div');
+    errDiv.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#f59e0b;color:white;padding:10px;font-size:12px;z-index:9999;';
+    errDiv.textContent = '⚠️ config.js non chargé — vérifie le chemin js/config.js';
+    document.body.appendChild(errDiv);
+  } else if (typeof fg === 'undefined') {
+    const errDiv = document.createElement('div');
+    errDiv.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#f59e0b;color:white;padding:10px;font-size:12px;z-index:9999;';
+    errDiv.textContent = '⚠️ firebase.js non chargé — vérifie le chemin js/firebase.js';
+    document.body.appendChild(errDiv);
+  }
+});
+
 /* ════════════════════════════════════════════
    player.js — Logique interface joueur
    Gère : join, lobby, tous les états de jeu,
@@ -740,9 +755,17 @@ $('input-code').addEventListener('input', e => {
   e.target.value = e.target.value.toUpperCase();
 });
 
-$('btn-join').addEventListener('click', doJoin);
-$('input-code').addEventListener('keydown', e => { if(e.key==='Enter') doJoin(); });
-$('input-name').addEventListener('keydown', e => { if(e.key==='Enter') $('input-code').focus(); });
+// Attendre que le DOM soit prêt avant d'attacher les événements
+document.addEventListener('DOMContentLoaded', () => {
+  const btnJoin = $('btn-join');
+  if (btnJoin) {
+    btnJoin.addEventListener('click', doJoin);
+  } else {
+    console.error('btn-join introuvable dans le DOM');
+  }
+  $('input-code').addEventListener('keydown', e => { if(e.key==='Enter') doJoin(); });
+  $('input-name').addEventListener('keydown', e => { if(e.key==='Enter') $('input-code').focus(); });
+});
 
 async function doJoin() {
   const name = $('input-name').value.trim();
