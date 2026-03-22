@@ -577,7 +577,7 @@
     </div>
   </div>
 
-  <button class="btn-primary" id="btn-join">Rejoindre →</button>
+  <button class="btn-primary" id="btn-join" onclick="doJoin()">Rejoindre →</button>
   <p class="error-msg" id="join-error"></p>
 </div>
 
@@ -764,6 +764,9 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('btn-join introuvable dans le DOM');
   }
   $('input-code').addEventListener('keydown', e => { if(e.key==='Enter') doJoin(); });
+  // Test visuel : colorer le bouton en vert si le JS s'exécute bien
+  const btn = $('btn-join');
+  if (btn) btn.style.outline = '3px solid lime';
   $('input-name').addEventListener('keydown', e => { if(e.key==='Enter') $('input-code').focus(); });
 });
 
