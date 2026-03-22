@@ -23,6 +23,14 @@ const val = id => $(id)?.value || "";
 const set = (id, t) => { const e = $(id); if (e) e.textContent = t; };
 function R(h) { A.innerHTML = h; }
 
+// ── Firebase renvoie les arrays comme objets {0:{...},1:{...}} ──
+// Ce helper normalise toujours en vrai array JS
+const toArr = v => {
+  if (!v) return [];
+  if (Array.isArray(v)) return v;
+  return Object.keys(v).sort((a,b)=>+a-+b).map(k => v[k]);
+};
+
 // ── Change le thème visuel (3D + étoiles CSS) ──
 function setBG(tid) {
   if (window.SCENE3D) window.SCENE3D.setTheme(tid);
@@ -135,7 +143,7 @@ async function doJoin() {
   const room = await fg(`rooms/${code}`);
   if (!room) { err(`Salle "${code}" introuvable.`); $("bJ").textContent="🚪 Rejoindre"; $("bJ").disabled=false; return; }
   if (room.phase !== "lobby") { err("Partie déjà commencée !"); $("bJ").textContent="🚪 Rejoindre"; $("bJ").disabled=false; return; }
-  if ((room.players||[]).length >= room.maxP) { err("Salle pleine !"); $("bJ").textContent="🚪 Rejoindre"; $("bJ").disabled=false; return; }
+  if (toArr(room.players).length >= room.maxP) { err("Salle pleine !"); $("bJ").textContent="🚪 Rejoindre"; $("bJ").disabled=false; return; }
   await fs(`rooms/${code}`, {...room, players:[...room.players,{name,isHost:false}]});
   ME=name; CODE=code; HOST=false;
   Wait({...room, players:[...room.players,{name,isHost:false}]});
@@ -150,15 +158,17 @@ function Lobby(room) {
   if (window.SCENE3D) window.SCENE3D.idle();
 
   // URL de base pour les joueurs
-  const baseUrl = window.location.origin + window.location.pathname.replace('index.html','');
-  const playerUrl = baseUrl + 'player.html';
+  // Construire l'URL de player.html robuste pour GitHub Pages et autres hébergeurs
+  const pathParts = window.location.pathname.split('/');
+  pathParts[pathParts.length - 1] = 'player.html'; // remplace le dernier segment (index.html ou vide)
+  const playerUrl = window.location.origin + pathParts.join('/');
   const inv = `🎯 BUZZ! Quiz\n\nRejoins ma partie !\nThèmes : ${(room.themes||[room.theme]).map(tid=>(THEMES[tid]||THEMES.culture).emoji+" "+(THEMES[tid]||THEMES.culture).name).join(", ")}\nCode : ${room.code}\n\n👉 Ouvre ce lien sur ton téléphone :\n${playerUrl}\nPuis entre le code : ${room.code}`;
 
   function draw(cur) {
-    const rows = (cur.players||[]).map((p,i)=>`<div style="display:flex;align-items:center;gap:9px;padding:7px 11px;border-radius:10px;background:rgba(255,255,255,.04)"><div style="width:26px;height:26px;border-radius:50%;background:${COL[i%8].bg};display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700">${i+1}</div><span style="font-weight:600;font-size:.88rem">${p.name}</span></div>`).join("");
+    const rows = toArr(cur.players).map((p,i)=>`<div style="display:flex;align-items:center;gap:9px;padding:7px 11px;border-radius:10px;background:rgba(255,255,255,.04)"><div style="width:26px;height:26px;border-radius:50%;background:${COL[i%8].bg};display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700">${i+1}</div><span style="font-weight:600;font-size:.88rem">${p.name}</span></div>`).join("");
     // L'hôte peut lancer dès qu'il y a au moins 1 joueur
-    const can = (cur.players||[]).length >= 1;
-    R(`<div class="sc"><div class="float" style="text-align:center"><div style="font-size:2.5rem">📺</div><h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;margin-top:4px">Écran principal</h2><p style="color:rgba(255,255,255,.38);font-size:.76rem;margin-top:3px">Cet écran est le plateau du jeu</p></div><div class="glass" style="padding:17px 19px;text-align:center;max-width:370px;width:100%"><p style="color:rgba(255,255,255,.42);font-size:.76rem;margin-bottom:6px">Code de la salle</p><div style="font-family:'Orbitron',sans-serif;font-size:2.4rem;font-weight:900;color:${t.accent};animation:roomGlow 2s ease-in-out infinite">${room.code}</div><p style="color:rgba(255,255,255,.28);font-size:.68rem;margin-top:5px;margin-bottom:13px">${(room.themes||[room.theme]).map(tid=>(THEMES[tid]||THEMES.culture).emoji).join(" ")} · ${room.rounds.map(r=>RT.find(x=>x.id===r)?.icon||"").join(" ")}</p><div style="background:rgba(0,0,0,.25);border-radius:11px;padding:11px 13px;text-align:left;border:1px solid rgba(255,255,255,.09);margin-bottom:9px;font-size:.78rem;line-height:1.75;white-space:pre-wrap;user-select:all">${inv}</div><button class="btn" id="bCp" style="width:100%;padding:11px;background:linear-gradient(135deg,${t.dark},${t.accent});color:white;border-radius:13px;font-size:.85rem">📋 Copier le lien d'invitation</button></div><div class="glass" style="padding:14px 16px;max-width:370px;width:100%"><p style="color:rgba(255,255,255,.48);font-size:.75rem;font-weight:600;margin-bottom:8px">JOUEURS (${(cur.players||[]).length}/${room.maxP})</p><div>${rows}${(cur.players||[]).length<room.maxP?`<div style="padding:7px 11px;border-radius:10px;border:1px dashed rgba(255,255,255,.11);color:rgba(255,255,255,.2);font-size:.76rem;text-align:center">En attente de joueurs…</div>`:""}</div></div><div style="display:flex;gap:10px;width:100%;max-width:370px"><button class="btn" id="bCn" style="background:rgba(255,255,255,.07);color:white;padding:12px;flex:1;font-size:.84rem">✕ Annuler</button><button class="btn" id="bLn" style="padding:12px;flex:2;font-size:.88rem;color:white;background:${can?`linear-gradient(135deg,${t.dark},${t.accent})`:"rgba(255,255,255,.1)"}" ${can?"":"disabled"}>${can?"🚀 Lancer !":"Attendez des joueurs"}</button></div></div>`);
+    const can = toArr(cur.players).length >= 1;
+    R(`<div class="sc"><div class="float" style="text-align:center"><div style="font-size:2.5rem">📺</div><h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;margin-top:4px">Écran principal</h2><p style="color:rgba(255,255,255,.38);font-size:.76rem;margin-top:3px">Cet écran est le plateau du jeu</p></div><div class="glass" style="padding:17px 19px;text-align:center;max-width:370px;width:100%"><p style="color:rgba(255,255,255,.42);font-size:.76rem;margin-bottom:6px">Code de la salle</p><div style="font-family:'Orbitron',sans-serif;font-size:2.4rem;font-weight:900;color:${t.accent};animation:roomGlow 2s ease-in-out infinite">${room.code}</div><p style="color:rgba(255,255,255,.28);font-size:.68rem;margin-top:5px;margin-bottom:13px">${(room.themes||[room.theme]).map(tid=>(THEMES[tid]||THEMES.culture).emoji).join(" ")} · ${room.rounds.map(r=>RT.find(x=>x.id===r)?.icon||"").join(" ")}</p><div style="background:rgba(0,0,0,.25);border-radius:11px;padding:11px 13px;text-align:left;border:1px solid rgba(255,255,255,.09);margin-bottom:9px;font-size:.78rem;line-height:1.75;white-space:pre-wrap;user-select:all">${inv}</div><button class="btn" id="bCp" style="width:100%;padding:11px;background:linear-gradient(135deg,${t.dark},${t.accent});color:white;border-radius:13px;font-size:.85rem">📋 Copier le lien d'invitation</button></div><div class="glass" style="padding:14px 16px;max-width:370px;width:100%"><p style="color:rgba(255,255,255,.48);font-size:.75rem;font-weight:600;margin-bottom:8px">JOUEURS (${toArr(cur.players).length}/${room.maxP})</p><div>${rows}${toArr(cur.players).length<room.maxP?`<div style="padding:7px 11px;border-radius:10px;border:1px dashed rgba(255,255,255,.11);color:rgba(255,255,255,.2);font-size:.76rem;text-align:center">En attente de joueurs…</div>`:""}</div></div><div style="display:flex;gap:10px;width:100%;max-width:370px"><button class="btn" id="bCn" style="background:rgba(255,255,255,.07);color:white;padding:12px;flex:1;font-size:.84rem">✕ Annuler</button><button class="btn" id="bLn" style="padding:12px;flex:2;font-size:.88rem;color:white;background:${can?`linear-gradient(135deg,${t.dark},${t.accent})`:"rgba(255,255,255,.1)"}" ${can?"":"disabled"}>${can?"🚀 Lancer !":"Attendez des joueurs"}</button></div></div>`);
     on("bCn","click",async()=>{ if(STOP)STOP(); await fd(`rooms/${room.code}`); CD={name:"",maxP:4,themes:[],rounds:[],elimR:2,cartonR:3}; Home(); });
     on("bLn","click",doLaunch);
     on("bCp","click",()=>{ navigator.clipboard.writeText(inv).then(()=>{set("bCp","✅ Copié !");setTimeout(()=>set("bCp","📋 Copier le lien d'invitation"),2500);}).catch(()=>{}); });
@@ -181,7 +191,7 @@ function Wait(room) {
   setBG(room.theme);
   if (window.SCENE3D) window.SCENE3D.idle();
   function draw(cur) {
-    const rows = (cur.players||[]).map((p,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:9px;background:rgba(255,255,255,.04)"><div style="width:22px;height:22px;border-radius:50%;background:${COL[i%8].bg};flex-shrink:0"></div><span style="font-size:.84rem;font-weight:600">${p.name}</span>${p.isHost?`<span style="margin-left:auto;font-size:.62rem;color:${t.accent};font-weight:700">HÔTE</span>`:""}</div>`).join("");
+    const rows = toArr(cur.players).map((p,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:9px;background:rgba(255,255,255,.04)"><div style="width:22px;height:22px;border-radius:50%;background:${COL[i%8].bg};flex-shrink:0"></div><span style="font-size:.84rem;font-weight:600">${p.name}</span>${p.isHost?`<span style="margin-left:auto;font-size:.62rem;color:${t.accent};font-weight:700">HÔTE</span>`:""}</div>`).join("");
     R(`<div class="sc"><div class="float" style="text-align:center"><div style="font-size:2.8rem">⏳</div><h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;margin-top:4px">En attente…</h2><p style="color:rgba(255,255,255,.42);margin-top:3px;font-size:.84rem">L'hôte n'a pas encore lancé</p></div><div class="glass" style="padding:17px 19px;text-align:center;max-width:320px;width:100%"><p style="color:${t.accent};font-weight:700;margin-bottom:4px">Code : ${room.code}</p><p style="color:rgba(255,255,255,.48);font-size:.82rem">Vous jouez en tant que <strong>${ME}</strong></p><div style="margin-top:12px;display:grid;gap:6px">${rows}</div></div><button class="btn" id="bLv" style="background:rgba(255,255,255,.07);color:white;padding:11px 24px;font-size:.84rem">Quitter</button></div>`);
     on("bLv","click",()=>{ if(STOP)STOP(); Home(); });
   }
