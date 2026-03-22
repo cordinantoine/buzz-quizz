@@ -23,6 +23,13 @@ const val = id => $(id)?.value || "";
 const set = (id, t) => { const e = $(id); if (e) e.textContent = t; };
 function R(h) { A.innerHTML = h; }
 
+// ── Firebase renvoie les arrays comme objets {0:{...},1:{...}} ──
+// Ce helper normalise toujours en vrai array JS
+const toArr = v => {
+  if (!v) return [];
+  if (Array.isArray(v)) return v;
+  return Object.keys(v).sort((a,b)=>+a-+b).map(k => v[k]);
+};
 
 // ── Change le thème visuel (3D + étoiles CSS) ──
 function setBG(tid) {
@@ -119,12 +126,10 @@ async function doCreate() {
 //  REJOINDRE UNE PARTIE
 // ════════════════════════════════════════════
 function Join() {
-  setBG("culture");
-  R(`<div class="sc"><div class="glass su" style="width:100%;max-width:370px;padding:24px 20px"><button id="bBk" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:.8rem;margin-bottom:16px">← Retour</button><h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:3px">Rejoindre</h2><p style="color:rgba(255,255,255,.38);margin-bottom:18px;font-size:.8rem">Entrez le code communiqué par l'hôte</p><div style="margin-bottom:12px;padding:9px 12px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;gap:8px"><span id="dTxt" style="color:rgba(255,255,255,.42);font-size:.7rem">Tester la connexion</span><button id="bDg" style="background:rgba(255,255,255,.1);border:none;color:white;border-radius:8px;padding:4px 10px;font-size:.68rem;cursor:pointer;font-family:'Poppins',sans-serif;font-weight:600">Tester</button></div><label style="color:rgba(255,255,255,.5);font-size:.75rem;font-weight:600;margin-bottom:5px;display:block">Votre prénom</label><input id="iN" placeholder="Ex: Marie" maxlength="14" style="margin-bottom:11px"/><label style="color:rgba(255,255,255,.5);font-size:.75rem;font-weight:600;margin-bottom:5px;display:block">Code de la salle</label><input id="iC" placeholder="EX: AB12C" maxlength="5" style="text-transform:uppercase;letter-spacing:.2em;font-size:1.25rem;text-align:center;font-weight:700;margin-bottom:14px"/><p id="eMsg" style="color:#f87171;font-size:.8rem;margin-bottom:11px;text-align:center;display:none"></p><button class="btn" id="bJ" style="width:100%;padding:14px;background:linear-gradient(135deg,#0891b2,#22d3ee);color:white">🚪 Rejoindre</button></div></div>`);
-  on("bBk","click",Home);
-  on("iC","input",e=>e.target.value=e.target.value.toUpperCase());
-  on("bJ","click",doJoin);
-  on("bDg","click",async()=>{ set("dTxt","⏳ Test…"); try{ const r=await fetch(`${FB}/.json?shallow=true`); set("dTxt",r.ok?"✅ Connexion OK !":"❌ Erreur "+r.status); }catch(e){ set("dTxt","❌ "+e.message); } });
+  // Rediriger directement vers player.html — l'interface joueur dédiée
+  const pathParts = window.location.pathname.split('/');
+  pathParts[pathParts.length - 1] = 'player.html';
+  window.location.href = window.location.origin + pathParts.join('/');
 }
 
 async function doJoin() {
@@ -137,7 +142,8 @@ async function doJoin() {
   if (!room) { err(`Salle "${code}" introuvable.`); $("bJ").textContent="🚪 Rejoindre"; $("bJ").disabled=false; return; }
   if (room.phase !== "lobby") { err("Partie déjà commencée !"); $("bJ").textContent="🚪 Rejoindre"; $("bJ").disabled=false; return; }
   if (toArr(room.players).length >= room.maxP) { err("Salle pleine !"); $("bJ").textContent="🚪 Rejoindre"; $("bJ").disabled=false; return; }
-  await fs(`rooms/${code}`, {...room, players:[...room.players,{name,isHost:false}]});
+  const existingPlayers = toArr(room.players);
+  await fs(`rooms/${code}/players`, [...existingPlayers, {name,isHost:false}]);
   ME=name; CODE=code; HOST=false;
   Wait({...room, players:[...room.players,{name,isHost:false}]});
 }
@@ -168,7 +174,18 @@ function Lobby(room) {
   }
   draw(room);
   if (STOP) STOP();
-  STOP = fl(`rooms/${room.code}`, cur => { if (cur) draw(cur); });
+  // Polling toutes les 2s — plus fiable que SSE pour détecter les nouveaux joueurs
+  STOP = (() => {
+    let active = true;
+    const poll = async () => {
+      if (!active) return;
+      const cur = await fg(`rooms/${room.code}`);
+      if (cur && active) draw(cur);
+      if (active) setTimeout(poll, 2000);
+    };
+    poll();
+    return () => { active = false; };
+  })();
 }
 
 async function doLaunch() {
