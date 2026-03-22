@@ -6,6 +6,13 @@
    actBuzz, actAnswer, actPick
    ════════════════════════════════════════════ */
 
+// Firebase renvoie les arrays comme objets — on normalise
+const toArr = v => {
+  if (!v) return [];
+  if (Array.isArray(v)) return v;
+  return Object.keys(v).sort((a,b)=>+a-+b).map(k => v[k]);
+};
+
 async function hostLoadQ() {
   USED_QS = new Set();
   const room = await fg(`rooms/${CODE}`);
@@ -14,8 +21,8 @@ async function hostLoadQ() {
 
   // players = uniquement les vrais joueurs (ceux qui ont rejoint via player.html)
   // L'hôte ne joue pas, il n'est pas dans room.players
-  const players = (room.players || []).map(p => p.name);
-  if (players.length === 0) { alert("Aucun joueur n'a rejoint !"); return; }
+  const players = toArr(room.players).map(p => p.name);
+  if (!players || players.length === 0) { alert("Aucun joueur n'a rejoint !"); return; }
 
   const rQs = {};
   room.rounds.forEach((r, i) => { rQs[i] = getStaticQs(themes, r === "elim" ? Math.max(room.elimR, 3) : 8); });
