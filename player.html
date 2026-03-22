@@ -315,10 +315,25 @@ async function doJoin() {
     return;
   }
 
-  // Écrire le joueur — on reécrit le tableau complet des joueurs
-  // pour garantir que le listener Firebase de l'hôte se déclenche
+  // Écrire le joueur
   const newPlayers = [...players, { name, isHost: false }];
-  await fs(`rooms/${code}/players`, newPlayers);
+  const writeOk = await fs(`rooms/${code}/players`, newPlayers);
+
+  if (!writeOk) {
+    showErr("Erreur d'écriture Firebase. Vérifie ta connexion.");
+    G('btn-join').disabled = false; G('btn-join').textContent = 'Rejoindre →';
+    return;
+  }
+
+  // Vérifier que l'écriture a bien eu lieu
+  const check = await fg(`rooms/${code}/players`);
+  const checkArr = toArr(check);
+  const found = checkArr.find(p => p.name === name);
+  if (!found) {
+    showErr("Erreur : joueur non enregistré. Réessaie.");
+    G('btn-join').disabled = false; G('btn-join').textContent = 'Rejoindre →';
+    return;
+  }
 
   ME = name;
   CODE = code;
