@@ -6,13 +6,6 @@
    actBuzz, actAnswer, actPick
    ════════════════════════════════════════════ */
 
-// Firebase renvoie les arrays comme objets — on normalise
-const toArr = v => {
-  if (!v) return [];
-  if (Array.isArray(v)) return v;
-  return Object.keys(v).sort((a,b)=>+a-+b).map(k => v[k]);
-};
-
 async function hostLoadQ() {
   USED_QS = new Set();
   const room = await fg(`rooms/${CODE}`);
