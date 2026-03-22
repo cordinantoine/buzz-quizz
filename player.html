@@ -315,8 +315,10 @@ async function doJoin() {
     return;
   }
 
-  // Écrire uniquement ce joueur à sa position
-  await fs(`rooms/${code}/players/${players.length}`, { name, isHost: false });
+  // Écrire le joueur — on reécrit le tableau complet des joueurs
+  // pour garantir que le listener Firebase de l'hôte se déclenche
+  const newPlayers = [...players, { name, isHost: false }];
+  await fs(`rooms/${code}/players`, newPlayers);
 
   ME = name;
   CODE = code;
