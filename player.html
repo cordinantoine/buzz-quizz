@@ -337,18 +337,27 @@ function enterLobby(room) {
   G('lobby-player-name').textContent = ME;
 
   if (STOP_LISTENER) STOP_LISTENER();
-  STOP_LISTENER = fl(`rooms/${CODE}`, cur => {
-    if (!cur) return;
-    setAccent(cur.theme || 'culture');
-    MY_INDEX = toArr(cur.players).findIndex(p => p.name === ME);
-    if (cur.phase === 'lobby') {
-      renderLobbyPlayers(toArr(cur.players));
-    } else if (cur.questionsReady && cur.gameState) {
-      if (STOP_LISTENER) { STOP_LISTENER(); STOP_LISTENER = null; }
-      showScreen('screen-game');
-      watchGame();
+  // Polling toutes les 2s — plus fiable que SSE pour détecter les changements
+  let _lobbyActive = true;
+  const _lobbyPoll = async () => {
+    if (!_lobbyActive) return;
+    const cur = await fg(`rooms/${CODE}`);
+    if (cur && _lobbyActive) {
+      setAccent(cur.theme || 'culture');
+      MY_INDEX = toArr(cur.players).findIndex(p => p.name === ME);
+      if (cur.phase === 'lobby') {
+        renderLobbyPlayers(toArr(cur.players));
+      } else if (cur.questionsReady && cur.gameState) {
+        _lobbyActive = false;
+        showScreen('screen-game');
+        watchGame();
+        return;
+      }
     }
-  });
+    if (_lobbyActive) setTimeout(_lobbyPoll, 2000);
+  };
+  _lobbyPoll();
+  STOP_LISTENER = () => { _lobbyActive = false; };
 }
 
 function renderLobbyPlayers(players) {
