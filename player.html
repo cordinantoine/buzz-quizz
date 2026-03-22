@@ -688,12 +688,28 @@
 <script src="js/config.js"></script>
 <script src="js/firebase.js"></script>
 <script>
+// Capture toutes les erreurs JS silencieuses
+window.onerror = function(msg, src, line, col, err) {
+  const errDiv = document.createElement('div');
+  errDiv.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#ef4444;color:white;padding:10px;font-size:12px;z-index:9999;word-break:break-all;';
+  errDiv.textContent = '❌ Erreur JS: ' + msg + ' (ligne ' + line + ')';
+  document.body.appendChild(errDiv);
+  return false;
+};
+
 /* ════════════════════════════════════════════
    player.js — Logique interface joueur
    Gère : join, lobby, tous les états de jeu,
           timer visuel, scores, réponses
    NE GÈRE PAS : la logique hôte (game.js)
    ════════════════════════════════════════════ */
+
+// Firebase renvoie les arrays comme objets {0:{...},1:{...}} — on normalise
+const toArr = v => {
+  if (!v) return [];
+  if (Array.isArray(v)) return v;
+  return Object.keys(v).sort((a,b)=>+a-+b).map(k => v[k]);
+};
 
 // ── État local ──
 let ME = "", CODE = "", MY_INDEX = -1;
@@ -742,16 +758,18 @@ async function doJoin() {
   const room = await fg(`rooms/${code}`);
   if (!room) { err(`Salle "${code}" introuvable`); $('btn-join').disabled=false; $('btn-join').textContent='Rejoindre →'; return; }
   if (room.phase !== 'lobby') { err("Partie déjà commencée !"); $('btn-join').disabled=false; $('btn-join').textContent='Rejoindre →'; return; }
-  if ((room.players||[]).length >= room.maxP) { err("Salle pleine !"); $('btn-join').disabled=false; $('btn-join').textContent='Rejoindre →'; return; }
-  if ((room.players||[]).find(p => p.name === name)) { err("Ce prénom est déjà pris !"); $('btn-join').disabled=false; $('btn-join').textContent='Rejoindre →'; return; }
+  if (toArr(room.players).length >= room.maxP) { err("Salle pleine !"); $('btn-join').disabled=false; $('btn-join').textContent='Rejoindre →'; return; }
+  if (toArr(room.players).find(p => p.name === name)) { err("Ce prénom est déjà pris !"); $('btn-join').disabled=false; $('btn-join').textContent='Rejoindre →'; return; }
 
-  // Rejoindre
-  const updated = { ...room, players: [...(room.players||[]), { name, isHost: false }] };
-  await fs(`rooms/${code}`, updated);
+  // Rejoindre — on lit l'index actuel et on écrit seulement ce joueur
+  // Firebase stocke les arrays comme objets {0:{...}, 1:{...}}
+  // On utilise Object.keys pour compter correctement
+  const currentKeys = toArr(room.players).length;
+  await fs(`rooms/${code}/players/${currentKeys}`, { name, isHost: false });
 
   ME = name;
   CODE = code;
-  MY_INDEX = updated.players.length - 1;
+  MY_INDEX = currentKeys;
 
   // Appliquer couleur accent du thème
   const theme = THEMES[room.theme] || THEMES.culture;
@@ -782,7 +800,7 @@ function enterLobby(room) {
     }
 
     // Recalculer mon index (au cas où)
-    MY_INDEX = (cur.players||[]).findIndex(p => p.name === ME);
+    MY_INDEX = toArr(cur.players).findIndex(p => p.name === ME);
 
     if (cur.phase === 'lobby') {
       renderLobbyPlayers(cur.players || []);
@@ -820,7 +838,7 @@ function watchGame() {
     const gs = room.gameState;
 
     // Recalculer mon index
-    MY_INDEX = (gs.players||[]).indexOf(ME);
+    MY_INDEX = (toArr(gs.players)).indexOf(ME);
 
     // Màj thème
     const theme = THEMES[room.theme] || THEMES.culture;
@@ -876,7 +894,7 @@ function startTimer(gs) {
 
 function updateScores(gs) {
   const strip = $('scores-strip');
-  strip.innerHTML = (gs.players||[]).map((p, i) => `
+  strip.innerHTML = (toArr(gs.players)).map((p, i) => `
     <div class="score-pill ${p === ME ? 'me' : ''}">
       <span class="score-pill-name">${p === ME ? 'Toi' : p}</span>
       <span class="score-pill-val">${gs.scores[i] || 0}</span>
