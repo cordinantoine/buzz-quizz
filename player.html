@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <title>BUZZ! — Joueur</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* ══ RESET & BASE ══ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html, body {
+      height: 100%; width: 100%;
+      background: #06080f;
+      color: #e8edf5;
+      font-family: 'DM Sans', sans-serif;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* ══ VARIABLES THÈME ══ */
+    :root {
+      --accent: #a78bfa;
+      --accent-dark: #7c3aed;
+      --accent-glow: #a78bfa33;
+    }
+
+    /* ══ ÉCRANS ══ */
+    .screen {
+      position: fixed; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 20px;
+      gap: 16px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .screen.active { opacity: 1; pointer-events: all; }
+
+    /* ══ ÉCRAN JOIN ══ */
+    #screen-join {
+      background: radial-gradient(ellipse at 50% 0%, #1a0a3a 0%, #06080f 60%);
+    }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4.5rem;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      text-shadow: 0 0 40px var(--accent-glow);
+      line-height: 1;
+    }
+    .logo span { color: #e8edf5; }
+    .tagline {
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      color: #4a5a7a;
+      font-weight: 500;
+      text-transform: uppercase;
+      margin-top: -8px;
+    }
+    .field-group {
+      width: 100%; max-width: 300px;
+      display: flex; flex-direction: column;
+      gap: 10px; margin-top: 8px;
+    }
+    .field-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      color: #4a5a7a;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .field-input {
+      background: #0e1422;
+      border: 1px solid #1e2a40;
+      border-radius: 12px;
+      color: #e8edf5;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      padding: 14px 16px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .field-input:focus { border-color: var(--accent); }
+    .field-input::placeholder { color: #2a3a55; }
+    #input-code {
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      font-size: 1.4rem;
+      font-weight: 700;
+      text-align: center;
+      font-family: 'Bebas Neue', sans-serif;
+    }
+    .btn-primary {
+      width: 100%; max-width: 300px;
+      padding: 16px;
+      background: var(--accent);
+      border: none;
+      border-radius: 14px;
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: all 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary:active { transform: scale(0.97); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+    .error-msg {
+      font-size: 0.8rem;
+      color: #f87171;
+      text-align: center;
+      min-height: 18px;
+    }
+
+    /* ══ ÉCRAN LOBBY ══ */
+    #screen-lobby {
+      background: radial-gradient(ellipse at 50% 0%, #0a1a2a 0%, #06080f 60%);
+      gap: 12px;
+    }
+    .lobby-code {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: #2a3a55;
+      text-transform: uppercase;
+    }
+    .lobby-code span {
+      color: var(--accent);
+      font-size: 2rem;
+      display: block;
+      letter-spacing: 0.3em;
+    }
+    .lobby-name {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #e8edf5;
+    }
+    .lobby-players {
+      width: 100%; max-width: 300px;
+      background: #0e1422;
+      border: 1px solid #1e2a40;
+      border-radius: 16px;
+      padding: 14px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .lobby-player-row {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.9rem;
+    }
+    .player-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .lobby-waiting {
+      font-size: 0.78rem;
+      color: #2a3a55;
+      text-align: center;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+    /* ══ ÉCRAN JEU PRINCIPAL ══ */
+    #screen-game {
+      padding: 0;
+      justify-content: flex-start;
+      background: #06080f;
+    }
+
+    /* Bandeau haut */
+    .game-header {
+      width: 100%;
+      background: #0a0e1a;
+      border-bottom: 1px solid #1e2a40;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .game-round-info {
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .game-round-name {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .game-round-desc {
+      font-size: 0.6rem;
+      color: #2a3a55;
+    }
+    .game-timer {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      line-height: 1;
+      color: #e8edf5;
+      transition: color 0.3s;
+      min-width: 40px;
+      text-align: right;
+    }
+    .game-timer.urgent { color: #f87171; }
+
+    /* Scores strip */
+    .scores-strip {
+      width: 100%;
+      padding: 8px 16px;
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      flex-shrink: 0;
+      background: #06080f;
+      border-bottom: 1px solid #1e2a4022;
+      scrollbar-width: none;
+    }
+    .scores-strip::-webkit-scrollbar { display: none; }
+    .score-pill {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 2px; flex-shrink: 0;
+      padding: 6px 10px;
+      background: #0e1422;
+      border: 1px solid #1e2a40;
+      border-radius: 10px;
+      min-width: 60px;
+    }
+    .score-pill.me {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+    .score-pill-name {
+      font-size: 0.62rem;
+      color: #4a5a7a;
+      font-weight: 500;
+      white-space: nowrap;
+      max-width: 55px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .score-pill.me .score-pill-name { color: var(--accent); }
+    .score-pill-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      line-height: 1;
+      color: #e8edf5;
+    }
+
+    /* Zone de jeu */
+    .game-body {
+      flex: 1;
+      width: 100%;
+      display: flex; flex-direction: column;
+      padding: 16px;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    /* ── ÉTAT : Buzz (jeux buzzer/steal/elim/carton) ── */
+    #state-buzz {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 16px;
+    }
+    .buzz-btn {
+      width: min(200px, 55vw);
+      height: min(200px, 55vw);
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+      transition: transform 0.1s;
+    }
+    .buzz-btn:active { transform: scale(0.94); }
+    .buzz-btn-inner {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+      gap: 4px;
+      animation: buzzPulse 2.5s ease-in-out infinite;
+    }
+    @keyframes buzzPulse {
+      0%,100% { box-shadow: 0 0 0 0 var(--player-color, #ef4444)44; }
+      50% { box-shadow: 0 0 0 20px transparent; }
+    }
+    .buzz-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 0.1em;
+      color: white;
+    }
+    .buzz-sublabel {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .buzz-hint {
+      font-size: 0.72rem;
+      color: #2a3a55;
+      text-align: center;
+      max-width: 220px;
+      line-height: 1.5;
+    }
+
+    /* ── ÉTAT : Réponses (A B C D) ── */
+    #state-answers {
+      flex: 1;
+      display: flex; flex-direction: column;
+      gap: 10px;
+    }
+    .answer-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .answer-btn {
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 6px;
+      padding: 16px 10px;
+      transition: all 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .answer-btn:active:not([disabled]) { transform: scale(0.96); }
+    .answer-btn[disabled] { cursor: default; }
+    .answer-letter {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      line-height: 1;
+      color: white;
+    }
+    .answer-text {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+      text-align: center;
+      line-height: 1.3;
+    }
+    /* Couleurs des boutons réponse */
+    .answer-btn.color-0 { background: #1a2a6c; border: 1.5px solid #2a3a8c; }
+    .answer-btn.color-1 { background: #6c1a1a; border: 1.5px solid #8c2a2a; }
+    .answer-btn.color-2 { background: #1a6c3a; border: 1.5px solid #2a8c4a; }
+    .answer-btn.color-3 { background: #6c5a1a; border: 1.5px solid #8c7a2a; }
+    .answer-btn.ok { background: #14532d !important; border-color: #22c55e !important; box-shadow: 0 0 20px #22c55e44; }
+    .answer-btn.no { background: #7f1d1d !important; border-color: #ef4444 !important; box-shadow: 0 0 20px #ef444444; animation: shake 0.3s ease; }
+    .answer-btn.dim { opacity: 0.3; }
+    @keyframes shake {
+      0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)}
+    }
+
+    /* ── ÉTAT : Attente (QCM / Chrono) ── */
+    #state-waiting {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 14px;
+    }
+    .waiting-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      animation: spin 2s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .waiting-text {
+      font-size: 0.85rem;
+      color: #4a5a7a;
+      text-align: center;
+    }
+
+    /* ── ÉTAT : Patate ── */
+    #state-patate {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 12px;
+    }
+    .patate-emoji {
+      font-size: 4rem;
+      animation: patate 0.8s ease-in-out infinite;
+    }
+    @keyframes patate { 0%,100%{transform:scale(1) rotate(-5deg)} 50%{transform:scale(1.1) rotate(5deg)} }
+    .patate-holder {
+      font-size: 0.85rem;
+      color: #f97316;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    /* ── ÉTAT : Résultat ── */
+    #state-result {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 16px;
+    }
+    .result-icon {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem;
+    }
+    .result-icon.good { background: #14532d; border: 2px solid #22c55e; animation: popIn 0.4s cubic-bezier(.36,.07,.19,.97); }
+    .result-icon.bad  { background: #7f1d1d; border: 2px solid #ef4444; animation: popIn 0.4s cubic-bezier(.36,.07,.19,.97); }
+    @keyframes popIn { 0%{transform:scale(0.4);opacity:0} 70%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
+    .result-msg {
+      font-size: 0.88rem;
+      color: #8a9ab5;
+      text-align: center;
+      line-height: 1.5;
+      max-width: 260px;
+    }
+    .result-pts {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      line-height: 1;
+    }
+    .result-pts.good { color: #4ade80; }
+    .result-pts.bad  { color: #f87171; }
+
+    /* ── ÉTAT : Éliminé ── */
+    #state-elim {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 12px;
+    }
+    .elim-icon { font-size: 3rem; }
+    .elim-text { font-size: 0.85rem; color: #4a5a7a; text-align: center; }
+
+    /* ── ÉTAT : Pick cible ── */
+    #state-pick {
+      flex: 1;
+      display: flex; flex-direction: column;
+      gap: 12px;
+    }
+    .pick-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #e8edf5;
+      text-align: center;
+    }
+    .pick-list {
+      display: flex; flex-direction: column; gap: 8px;
+      flex: 1; overflow-y: auto;
+    }
+    .pick-btn {
+      background: #0e1422;
+      border: 1px solid #1e2a40;
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: #e8edf5;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .pick-btn:active { transform: scale(0.98); background: #1e2a40; }
+    .pick-btn-score { font-size: 0.78rem; color: #4a5a7a; }
+
+    /* ── ÉTAT : Scoreboard ── */
+    #state-scoreboard {
+      flex: 1;
+      display: flex; flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+    }
+    .scoreboard-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-align: center;
+    }
+    .scoreboard-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px;
+      background: #0e1422;
+      border: 1px solid #1e2a40;
+      border-radius: 12px;
+    }
+    .scoreboard-row.me { border-color: var(--accent); background: var(--accent-glow); }
+    .scoreboard-rank {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: #2a3a55;
+      min-width: 28px;
+    }
+    .scoreboard-name { flex: 1; font-size: 0.9rem; font-weight: 500; }
+    .scoreboard-pts {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      color: var(--accent);
+    }
+
+    /* ── ÉTAT : Final ── */
+    #state-final {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 14px;
+    }
+    .final-trophy { font-size: 4rem; animation: float 3s ease-in-out infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    .final-winner { font-size: 1rem; font-weight: 700; color: #e8edf5; text-align: center; }
+    .final-winner span { color: var(--accent); }
+
+    /* ══ COULEURS JOUEURS ══ */
+    .pc-0 { --player-color: #ef4444; background: #ef4444; }
+    .pc-1 { --player-color: #3b82f6; background: #3b82f6; }
+    .pc-2 { --player-color: #22c55e; background: #22c55e; }
+    .pc-3 { --player-color: #f59e0b; background: #f59e0b; }
+    .pc-4 { --player-color: #a855f7; background: #a855f7; }
+    .pc-5 { --player-color: #ec4899; background: #ec4899; }
+    .pc-6 { --player-color: #14b8a6; background: #14b8a6; }
+    .pc-7 { --player-color: #f97316; background: #f97316; }
+
+    /* Couleur joueur pour le buzz btn */
+    .buzz-btn-inner.pc-0 { background: #ef4444; }
+    .buzz-btn-inner.pc-1 { background: #3b82f6; }
+    .buzz-btn-inner.pc-2 { background: #22c55e; }
+    .buzz-btn-inner.pc-3 { background: #f59e0b; }
+    .buzz-btn-inner.pc-4 { background: #a855f7; }
+    .buzz-btn-inner.pc-5 { background: #ec4899; }
+    .buzz-btn-inner.pc-6 { background: #14b8a6; }
+    .buzz-btn-inner.pc-7 { background: #f97316; }
+
+    /* ══ CARTONS ══ */
+    .carton-bar {
+      width: 100%;
+      display: flex; gap: 6px; justify-content: center;
+      padding: 4px 0;
+    }
+    .carton-dot {
+      width: 10px; height: 14px; border-radius: 2px;
+      background: #1e2a40;
+    }
+    .carton-dot.yellow { background: #f59e0b; }
+    .carton-dot.red    { background: #ef4444; }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════
+     ÉCRAN 1 : REJOINDRE
+════════════════════════════════ -->
+<div id="screen-join" class="screen active">
+  <div class="logo">BUZZ<span>!</span></div>
+  <p class="tagline">Quiz · Multijoueur</p>
+
+  <div class="field-group">
+    <div>
+      <p class="field-label">Ton prénom</p>
+      <input id="input-name" class="field-input" placeholder="Ex: Marie" maxlength="14" autocomplete="off"/>
+    </div>
+    <div>
+      <p class="field-label">Code de la salle</p>
+      <input id="input-code" class="field-input" placeholder="AB12C" maxlength="5" autocomplete="off"/>
+    </div>
+  </div>
+
+  <button class="btn-primary" id="btn-join">Rejoindre →</button>
+  <p class="error-msg" id="join-error"></p>
+</div>
+
+<!-- ════════════════════════════════
+     ÉCRAN 2 : LOBBY (attente)
+════════════════════════════════ -->
+<div id="screen-lobby" class="screen">
+  <div class="lobby-code">
+    Salle
+    <span id="lobby-code-val">—</span>
+  </div>
+  <p class="lobby-name" id="lobby-player-name">—</p>
+  <div class="lobby-players" id="lobby-players-list"></div>
+  <p class="lobby-waiting">En attente du lancement…</p>
+</div>
+
+<!-- ════════════════════════════════
+     ÉCRAN 3 : JEU
+════════════════════════════════ -->
+<div id="screen-game" class="screen">
+
+  <!-- Header fixe -->
+  <div class="game-header">
+    <div class="game-round-info">
+      <span class="game-round-name" id="hdr-round-name">—</span>
+      <span class="game-round-desc" id="hdr-round-desc">—</span>
+    </div>
+    <div class="game-timer" id="hdr-timer">—</div>
+  </div>
+
+  <!-- Scores -->
+  <div class="scores-strip" id="scores-strip"></div>
+
+  <!-- Corps dynamique -->
+  <div class="game-body">
+
+    <!-- ÉTAT : Bouton BUZZ -->
+    <div id="state-buzz" style="display:none">
+      <button class="buzz-btn" id="buzz-btn" onclick="actBuzz()">
+        <div class="buzz-btn-inner" id="buzz-inner">
+          <span class="buzz-label">BUZZ</span>
+          <span class="buzz-sublabel">Appuie !</span>
+        </div>
+      </button>
+      <p class="buzz-hint" id="buzz-hint">Sois le premier à buzzer puis réponds !</p>
+    </div>
+
+    <!-- ÉTAT : Réponses A B C D -->
+    <div id="state-answers" style="display:none">
+      <div class="answer-grid" id="answer-grid"></div>
+    </div>
+
+    <!-- ÉTAT : Attente (j'ai répondu, j'attends les autres) -->
+    <div id="state-waiting" style="display:none">
+      <div class="waiting-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2">
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/>
+        </svg>
+      </div>
+      <p class="waiting-text">Réponse envoyée…<br>En attente des autres joueurs</p>
+    </div>
+
+    <!-- ÉTAT : Patate chaude -->
+    <div id="state-patate" style="display:none">
+      <div class="patate-emoji">🥔</div>
+      <p class="patate-holder" id="patate-holder-text">—</p>
+      <div class="answer-grid" id="patate-answer-grid" style="width:100%;margin-top:8px"></div>
+    </div>
+
+    <!-- ÉTAT : Résultat -->
+    <div id="state-result" style="display:none">
+      <div class="result-icon" id="result-icon">—</div>
+      <div class="result-pts" id="result-pts"></div>
+      <p class="result-msg" id="result-msg"></p>
+    </div>
+
+    <!-- ÉTAT : Éliminé de la manche -->
+    <div id="state-elim" style="display:none">
+      <div class="elim-icon">💀</div>
+      <p class="elim-text">Tu es éliminé(e) de cette manche.<br>Attends le prochain round !</p>
+    </div>
+
+    <!-- ÉTAT : Choisir une cible -->
+    <div id="state-pick" style="display:none">
+      <p class="pick-title" id="pick-title">Qui choisissez-vous ?</p>
+      <div class="pick-list" id="pick-list"></div>
+    </div>
+
+    <!-- ÉTAT : Scoreboard inter-rounds -->
+    <div id="state-scoreboard" style="display:none">
+      <p class="scoreboard-title">Scores</p>
+      <div id="scoreboard-list"></div>
+    </div>
+
+    <!-- ÉTAT : Final -->
+    <div id="state-final" style="display:none">
+      <div class="final-trophy">🏆</div>
+      <p class="final-winner" id="final-winner-text">—</p>
+      <button class="btn-primary" onclick="goHome()" style="max-width:220px;margin-top:8px">Retour à l'accueil</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SCRIPTS
+════════════════════════════════ -->
+<script src="js/config.js"></script>
+<script src="js/firebase.js"></script>
+<script>
+/* ════════════════════════════════════════════
+   player.js — Logique interface joueur
+   Gère : join, lobby, tous les états de jeu,
+          timer visuel, scores, réponses
+   NE GÈRE PAS : la logique hôte (game.js)
+   ════════════════════════════════════════════ */
+
+// ── État local ──
+let ME = "", CODE = "", MY_INDEX = -1;
+let STOP_LISTENER = null;
+let TIMER_IV = null;
+let LAST_KEY = "";
+
+// ── Helpers DOM ──
+const $ = id => document.getElementById(id);
+const showScreen = id => {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  $(id).classList.add('active');
+};
+const showState = id => {
+  const states = ['state-buzz','state-answers','state-waiting','state-patate',
+                  'state-result','state-elim','state-pick','state-scoreboard','state-final'];
+  states.forEach(s => $(s).style.display = 'none');
+  $(id).style.display = 'flex';
+};
+
+// ── Couleurs joueurs ──
+const PLAYER_COLORS = ['#ef4444','#3b82f6','#22c55e','#f59e0b','#a855f7','#ec4899','#14b8a6','#f97316'];
+
+// ════════════════════════════
+//  JOIN
+// ════════════════════════════
+$('input-code').addEventListener('input', e => {
+  e.target.value = e.target.value.toUpperCase();
+});
+
+$('btn-join').addEventListener('click', doJoin);
+$('input-code').addEventListener('keydown', e => { if(e.key==='Enter') doJoin(); });
+$('input-name').addEventListener('keydown', e => { if(e.key==='Enter') $('input-code').focus(); });
+
+async function doJoin() {
+  const name = $('input-name').value.trim();
+  const code = $('input-code').value.trim().toUpperCase();
+  const err  = m => { $('join-error').textContent = m; };
+
+  if (!name) { err("Entre ton prénom !"); return; }
+  if (code.length !== 5) { err("Le code fait 5 caractères"); return; }
+
+  $('btn-join').disabled = true;
+  $('btn-join').textContent = '…';
+
+  const room = await fg(`rooms/${code}`);
+  if (!room) { err(`Salle "${code}" introuvable`); $('btn-join').disabled=false; $('btn-join').textContent='Rejoindre →'; return; }
+  if (room.phase !== 'lobby') { err("Partie déjà commencée !"); $('btn-join').disabled=false; $('btn-join').textContent='Rejoindre →'; return; }
+  if ((room.players||[]).length >= room.maxP) { err("Salle pleine !"); $('btn-join').disabled=false; $('btn-join').textContent='Rejoindre →'; return; }
+  if ((room.players||[]).find(p => p.name === name)) { err("Ce prénom est déjà pris !"); $('btn-join').disabled=false; $('btn-join').textContent='Rejoindre →'; return; }
+
+  // Rejoindre
+  const updated = { ...room, players: [...(room.players||[]), { name, isHost: false }] };
+  await fs(`rooms/${code}`, updated);
+
+  ME = name;
+  CODE = code;
+  MY_INDEX = updated.players.length - 1;
+
+  // Appliquer couleur accent du thème
+  const theme = THEMES[room.theme] || THEMES.culture;
+  document.documentElement.style.setProperty('--accent', theme.accent);
+  document.documentElement.style.setProperty('--accent-dark', theme.dark);
+  document.documentElement.style.setProperty('--accent-glow', theme.accent + '33');
+
+  enterLobby(updated);
+}
+
+// ════════════════════════════
+//  LOBBY
+// ════════════════════════════
+function enterLobby(room) {
+  showScreen('screen-lobby');
+  $('lobby-code-val').textContent = CODE;
+  $('lobby-player-name').textContent = ME;
+  renderLobbyPlayers(room.players || []);
+
+  if (STOP_LISTENER) STOP_LISTENER();
+  STOP_LISTENER = fl(`rooms/${CODE}`, cur => {
+    if (!cur) return;
+
+    // Mise à jour thème si changé
+    if (cur.theme) {
+      const t = THEMES[cur.theme] || THEMES.culture;
+      document.documentElement.style.setProperty('--accent', t.accent);
+    }
+
+    // Recalculer mon index (au cas où)
+    MY_INDEX = (cur.players||[]).findIndex(p => p.name === ME);
+
+    if (cur.phase === 'lobby') {
+      renderLobbyPlayers(cur.players || []);
+    } else if (cur.questionsReady && cur.gameState) {
+      // La partie démarre !
+      if (STOP_LISTENER) { STOP_LISTENER(); STOP_LISTENER = null; }
+      enterGame(cur);
+    }
+  });
+}
+
+function renderLobbyPlayers(players) {
+  const list = $('lobby-players-list');
+  list.innerHTML = players.map((p, i) => `
+    <div class="lobby-player-row">
+      <div class="player-dot" style="background:${PLAYER_COLORS[i%8]}"></div>
+      <span style="font-size:0.9rem;font-weight:${p.name===ME?'700':'400'};color:${p.name===ME?'#e8edf5':'#8a9ab5'}">${p.name}${p.isHost?' 👑':''}</span>
+    </div>
+  `).join('');
+}
+
+// ════════════════════════════
+//  GAME
+// ════════════════════════════
+function enterGame(room) {
+  showScreen('screen-game');
+  watchGame();
+}
+
+function watchGame() {
+  if (STOP_LISTENER) STOP_LISTENER();
+  STOP_LISTENER = fl(`rooms/${CODE}`, room => {
+    if (!room || !room.gameState || !room.questionsReady) return;
+
+    const gs = room.gameState;
+
+    // Recalculer mon index
+    MY_INDEX = (gs.players||[]).indexOf(ME);
+
+    // Màj thème
+    const theme = THEMES[room.theme] || THEMES.culture;
+    document.documentElement.style.setProperty('--accent', theme.accent);
+    document.documentElement.style.setProperty('--accent-dark', theme.dark);
+    document.documentElement.style.setProperty('--accent-glow', theme.accent + '33');
+
+    // Clé pour éviter les re-renders inutiles
+    const key = gs.phase + '-' + gs.roundIdx + '-' + gs.qIdx + '-' + gs.buzzed + '-' + gs.revealed + '-' + gs.pickTarget + '-' + (gs.patateHolder||'');
+    if (key === LAST_KEY) return;
+    LAST_KEY = key;
+
+    // Màj header
+    updateHeader(room, gs);
+    // Màj scores
+    updateScores(gs);
+    // Màj corps selon la phase
+    renderGameState(room, gs);
+  });
+}
+
+function updateHeader(room, gs) {
+  const rType = room.rounds[gs.roundIdx] || '';
+  const r = RT.find(x => x.id === rType);
+  $('hdr-round-name').textContent = r ? `${r.icon} ${r.name}` : '';
+  $('hdr-round-name').style.color = (THEMES[room.theme] || THEMES.culture).accent;
+  $('hdr-round-desc').textContent = r ? r.desc : '';
+
+  // Timer
+  startTimer(gs);
+}
+
+function startTimer(gs) {
+  if (TIMER_IV) clearInterval(TIMER_IV);
+  const el = $('hdr-timer');
+
+  if (!gs.timerStart || !gs.timerDur || gs.revealed) {
+    el.textContent = '—';
+    el.classList.remove('urgent');
+    return;
+  }
+
+  const tick = () => {
+    const elapsed = (Date.now() - gs.timerStart) / 1000;
+    const left = Math.max(0, Math.round(gs.timerDur - elapsed));
+    el.textContent = left + 's';
+    el.classList.toggle('urgent', left <= 5);
+    if (left === 0) clearInterval(TIMER_IV);
+  };
+  tick();
+  TIMER_IV = setInterval(tick, 500);
+}
+
+function updateScores(gs) {
+  const strip = $('scores-strip');
+  strip.innerHTML = (gs.players||[]).map((p, i) => `
+    <div class="score-pill ${p === ME ? 'me' : ''}">
+      <span class="score-pill-name">${p === ME ? 'Toi' : p}</span>
+      <span class="score-pill-val">${gs.scores[i] || 0}</span>
+    </div>
+  `).join('');
+}
+
+// ════════════════════════════
+//  RENDU ÉTAT DE JEU
+// ════════════════════════════
+function renderGameState(room, gs) {
+  const rType = room.rounds[gs.roundIdx] || '';
+  const q = (gs.rQs||{})[gs.roundIdx]?.[gs.qIdx];
+  const isElim = (gs.roundElim||[]).includes(ME);
+  const myAns  = (gs.answers||{})[ME];
+  const myIdx  = gs.players.indexOf(ME);
+  const colorClass = `pc-${myIdx % 8}`;
+
+  // ── Phase : intro round ──
+  if (gs.phase === 'roundIntro') {
+    showState('state-waiting');
+    $('state-waiting').querySelector('.waiting-text').textContent = 'Nouveau round qui arrive…';
+    return;
+  }
+
+  // ── Phase : scoreboard inter-rounds ──
+  if (gs.phase === 'scoreboard') {
+    renderScoreboard(gs, false);
+    return;
+  }
+
+  // ── Phase : final ──
+  if (gs.phase === 'final') {
+    renderFinal(gs);
+    return;
+  }
+
+  // ── Phase : question ──
+  if (gs.phase === 'question') {
+
+    // Éliminé de la manche
+    if (isElim) {
+      showState('state-elim');
+      return;
+    }
+
+    // Résultat révélé
+    if (gs.revealed && gs.result) {
+      renderResult(gs, q);
+      return;
+    }
+
+    // Mode pick (steal / elim / carton)
+    if (gs.pickTarget && gs.buzzed === ME) {
+      renderPick(gs, rType);
+      return;
+    }
+
+    // Patate chaude
+    if (rType === 'patate') {
+      if (gs.patateHolder === ME) {
+        // J'ai la patate → afficher les réponses
+        renderAnswers(gs, q, rType, true);
+      } else {
+        // Quelqu'un d'autre a la patate
+        showState('state-patate');
+        $('patate-holder-text').textContent = `🥔 ${gs.patateHolder} a la patate…`;
+        $('patate-answer-grid').innerHTML = '';
+      }
+      return;
+    }
+
+    // QCM / Chrono / Orage → tout le monde répond directement
+    if (rType === 'qcm' || rType === 'chrono' || rType === 'orage') {
+      if (myAns !== undefined) {
+        // Déjà répondu
+        showState('state-waiting');
+        $('state-waiting').querySelector('.waiting-text').textContent = 'Réponse envoyée !\nEn attente des autres…';
+      } else {
+        renderAnswers(gs, q, rType, false);
+      }
+      return;
+    }
+
+    // Buzzer / Steal / Elim / Carton
+    if (rType === 'buzzer' || rType === 'steal' || rType === 'elim' || rType === 'carton') {
+      const amBuzzer = gs.buzzed === ME;
+      const buzzedOut = (gs.buzzedOut||[]).includes(ME);
+
+      if (buzzedOut) {
+        // Déjà tenté et raté
+        showState('state-elim');
+        $('state-elim').querySelector('.elim-text').textContent = 'Tu as déjà tenté ta chance.\nAttends le prochain buzz !';
+        return;
+      }
+
+      if (amBuzzer) {
+        // J'ai buzzé → afficher les réponses
+        renderAnswers(gs, q, rType, false);
+        return;
+      }
+
+      if (gs.buzzed && !amBuzzer) {
+        // Quelqu'un d'autre a buzzé
+        showState('state-waiting');
+        $('state-waiting').querySelector('.waiting-text').textContent = `${gs.buzzed} répond…`;
+        return;
+      }
+
+      // Personne n'a encore buzzé → bouton BUZZ
+      showState('state-buzz');
+      $('buzz-inner').className = `buzz-btn-inner ${colorClass}`;
+      const hints = {
+        buzzer: 'Sois le premier à buzzer !',
+        steal:  'Buzzez et volez des points !',
+        elim:   'Buzzez pour éliminer quelqu\'un !',
+        carton: 'Buzzez pour donner un carton !'
+      };
+      $('buzz-hint').textContent = hints[rType] || '';
+      return;
+    }
+  }
+}
+
+// ── Afficher les réponses ──
+function renderAnswers(gs, q, rType, isPatate) {
+  showState('state-answers');
+  if (!q) return;
+
+  const myAns = (gs.answers||{})[ME];
+  const myAnsIdx = myAns?.ansIdx;
+  const grid = $('answer-grid');
+  const labels = ['A','B','C','D'];
+  const colors = ['color-0','color-1','color-2','color-3'];
+
+  grid.innerHTML = q.a.map((ans, i) => {
+    let cls = colors[i];
+    if (gs.revealed) {
+      if (i === q.c) cls += ' ok';
+      else if (i === myAnsIdx) cls += ' no';
+      else cls += ' dim';
+    }
+    const canClick = !gs.revealed && myAns === undefined;
+    return `
+      <button class="answer-btn ${cls}" ${canClick ? `onclick="actAnswer(${i})"` : 'disabled'}>
+        <span class="answer-letter">${labels[i]}</span>
+        <span class="answer-text">${ans}</span>
+      </button>
+    `;
+  }).join('');
+}
+
+// ── Résultat ──
+function renderResult(gs, q) {
+  showState('state-result');
+  const myAns = (gs.answers||{})[ME];
+  const myAnsIdx = myAns?.ansIdx;
+  const isCorrect = myAnsIdx === q?.c;
+  const result = gs.result;
+
+  const icon = $('result-icon');
+  const pts  = $('result-pts');
+  const msg  = $('result-msg');
+
+  if (myAns === undefined) {
+    // N'a pas répondu
+    icon.className = 'result-icon bad';
+    icon.textContent = '⏱️';
+    pts.className = 'result-pts bad';
+    pts.textContent = '';
+    msg.textContent = 'Temps écoulé !';
+  } else if (isCorrect) {
+    icon.className = 'result-icon good';
+    icon.textContent = '✓';
+    pts.className = 'result-pts good';
+    pts.textContent = '+' + (result?.pts || 0);
+    msg.textContent = result?.msg || 'Bonne réponse !';
+  } else {
+    icon.className = 'result-icon bad';
+    icon.textContent = '✗';
+    pts.className = 'result-pts bad';
+    pts.textContent = result?.pts < 0 ? result.pts : '';
+    msg.textContent = q ? `Bonne réponse : ${q.a[q.c]}` : '';
+  }
+}
+
+// ── Scoreboard ──
+function renderScoreboard(gs, isFinal) {
+  showState('state-scoreboard');
+  const ranked = gs.players
+    .map((p, i) => ({ name:p, score:gs.scores[i]||0, idx:i }))
+    .sort((a,b) => b.score - a.score);
+
+  const medals = ['🥇','🥈','🥉'];
+  $('scoreboard-list').innerHTML = ranked.map((p, rank) => `
+    <div class="scoreboard-row ${p.name === ME ? 'me' : ''}">
+      <span class="scoreboard-rank">${medals[rank] || rank+1}</span>
+      <span class="scoreboard-name">${p.name}${p.name===ME?' (toi)':''}</span>
+      <span class="scoreboard-pts">${p.score}</span>
+    </div>
+  `).join('');
+}
+
+// ── Final ──
+function renderFinal(gs) {
+  showState('state-final');
+  const ranked = gs.players.map((p,i)=>({name:p,score:gs.scores[i]||0})).sort((a,b)=>b.score-a.score);
+  const winner = ranked[0];
+  const isMe = winner?.name === ME;
+  $('final-winner-text').innerHTML = isMe
+    ? `🎉 Tu as gagné avec <span>${winner.score} pts</span> !`
+    : `<span>${winner?.name}</span> remporte la partie !<br><small style="color:#4a5a7a;font-size:0.8rem">Tu finishes ${ranked.findIndex(p=>p.name===ME)+1}ème</small>`;
+}
+
+// ── Pick cible ──
+function renderPick(gs, rType) {
+  showState('state-pick');
+  const titles = {
+    steal: '😈 Qui voulez-vous voler ?',
+    elim:  '💀 Qui voulez-vous éliminer ?',
+    carton:'🟨 À qui donnez-vous un carton ?'
+  };
+  $('pick-title').textContent = titles[rType] || 'Choisissez…';
+
+  const elig = gs.players.filter(p => p !== ME && !(gs.roundElim||[]).includes(p));
+  $('pick-list').innerHTML = elig.map((p, i) => {
+    const pi = gs.players.indexOf(p);
+    const score = gs.scores[pi] || 0;
+    return `
+      <button class="pick-btn" onclick="actPick('${p}')">
+        <span>${p}</span>
+        <span class="pick-btn-score">${score} pts</span>
+      </button>
+    `;
+  }).join('');
+}
+
+// ════════════════════════════
+//  ACTIONS JOUEUR
+// ════════════════════════════
+async function actBuzz() {
+  const gs = await fg(`rooms/${CODE}/gameState`);
+  if (!gs || gs.phase !== 'question' || gs.revealed || gs.buzzed) return;
+  if ((gs.buzzedOut||[]).includes(ME) || (gs.roundElim||[]).includes(ME)) return;
+  await fp(`rooms/${CODE}`, { 'gameState/buzzed': ME });
+}
+
+async function actAnswer(ansIdx) {
+  const gs = await fg(`rooms/${CODE}/gameState`);
+  if (!gs || gs.phase !== 'question' || gs.revealed) return;
+  if ((gs.answers||{})[ME] !== undefined) return;
+
+  await fp(`rooms/${CODE}`, {
+    [`gameState/answers/${ME}`]: { ansIdx, time: Date.now() }
+  });
+}
+
+async function actPick(targetName) {
+  const gs = await fg(`rooms/${CODE}/gameState`);
+  if (!gs || !gs.pickTarget || gs.buzzed !== ME) return;
+  await fp(`rooms/${CODE}`, { 'gameState/hostPick': targetName });
+}
+
+// ════════════════════════════
+//  RETOUR ACCUEIL
+// ════════════════════════════
+function goHome() {
+  if (STOP_LISTENER) { STOP_LISTENER(); STOP_LISTENER = null; }
+  if (TIMER_IV) clearInterval(TIMER_IV);
+  ME = ''; CODE = ''; MY_INDEX = -1; LAST_KEY = '';
+  $('input-name').value = '';
+  $('input-code').value = '';
+  $('join-error').textContent = '';
+  $('btn-join').disabled = false;
+  $('btn-join').textContent = 'Rejoindre →';
+  document.documentElement.style.setProperty('--accent', '#a78bfa');
+  showScreen('screen-join');
+}
+</script>
+</body>
+</html>
