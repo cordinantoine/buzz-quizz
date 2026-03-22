@@ -746,23 +746,22 @@ const PLAYER_COLORS = ['#ef4444','#3b82f6','#22c55e','#f59e0b','#a855f7','#ec489
 // ════════════════════════════
 //  JOIN
 // ════════════════════════════
-$('input-code').addEventListener('input', e => {
-  e.target.value = e.target.value.toUpperCase();
-});
-
-// Attendre que le DOM soit prêt avant d'attacher les événements
-document.addEventListener('DOMContentLoaded', () => {
+// Tout attacher après chargement complet
+window.addEventListener('load', () => {
   const btnJoin = $('btn-join');
   if (btnJoin) {
     btnJoin.addEventListener('click', doJoin);
-  } else {
-    console.error('btn-join introuvable dans le DOM');
+    btnJoin.style.outline = '3px solid lime'; // test visuel
   }
-  $('input-code').addEventListener('keydown', e => { if(e.key==='Enter') doJoin(); });
-  // Test visuel : colorer le bouton en vert si le JS s'exécute bien
-  const btn = $('btn-join');
-  if (btn) btn.style.outline = '3px solid lime';
-  $('input-name').addEventListener('keydown', e => { if(e.key==='Enter') $('input-code').focus(); });
+  const inputCode = $('input-code');
+  const inputName = $('input-name');
+  if (inputCode) {
+    inputCode.addEventListener('input', e => { e.target.value = e.target.value.toUpperCase(); });
+    inputCode.addEventListener('keydown', e => { if(e.key==='Enter') doJoin(); });
+  }
+  if (inputName) {
+    inputName.addEventListener('keydown', e => { if(e.key==='Enter') inputCode && inputCode.focus(); });
+  }
 });
 
 async function doJoin() {
