@@ -61,7 +61,6 @@ let lastAnswerKey = "";       // clé pour détecter les nouvelles réponses
 let CD = { name:"", maxP:4, themes:[], rounds:[], elimR:2, cartonR:3 };
 
 // ── Normalise un array Firebase (objet {0:..,1:..} → vrai array) ──
-// Firebase convertit les arrays en objets indexés — ce helper les reconvertit
 const toArr = v => {
   if (!v) return [];
   if (Array.isArray(v)) return v;
