@@ -719,12 +719,7 @@ window.addEventListener('DOMContentLoaded', () => {
    NE GÈRE PAS : la logique hôte (game.js)
    ════════════════════════════════════════════ */
 
-// Firebase renvoie les arrays comme objets {0:{...},1:{...}} — on normalise
-const toArr = v => {
-  if (!v) return [];
-  if (Array.isArray(v)) return v;
-  return Object.keys(v).sort((a,b)=>+a-+b).map(k => v[k]);
-};
+// toArr est défini dans config.js — disponible globalement
 
 // ── État local ──
 let ME = "", CODE = "", MY_INDEX = -1;
