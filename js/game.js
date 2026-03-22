@@ -11,12 +11,18 @@ async function hostLoadQ() {
   const room = await fg(`rooms/${CODE}`);
   if (!room) return;
   const themes = room.themes && room.themes.length ? room.themes : [room.theme || "culture"];
+
+  // players = uniquement les vrais joueurs (ceux qui ont rejoint via player.html)
+  // L'hôte ne joue pas, il n'est pas dans room.players
+  const players = (room.players || []).map(p => p.name);
+  if (players.length === 0) { alert("Aucun joueur n'a rejoint !"); return; }
+
   const rQs = {};
   room.rounds.forEach((r, i) => { rQs[i] = getStaticQs(themes, r === "elim" ? Math.max(room.elimR, 3) : 8); });
   const gs = {
     phase:"roundIntro", roundIdx:0, qIdx:0, elimManche:0,
-    rQs, players:room.players.map(p => p.name), scores:room.players.map(() => 0),
-    lives:room.players.map(() => 3), cartons:room.players.map(() => 0),
+    rQs, players, scores:players.map(() => 0),
+    lives:players.map(() => 3), cartons:players.map(() => 0),
     cartonManche:0, patateHolder:null, orageStart:null, patateExplodeAt:null,
     roundElim:[], buzzed:null, buzzedOut:[], answers:{},
     revealed:false, result:null, pickTarget:false,
@@ -192,8 +198,10 @@ function Watch(initialRoom) {
     if (gs.buzzed&&gs.buzzed!==ME) I_BUZZED=false;
     if (gs.revealed) I_BUZZED=false;
     lastPhase=key;
+    // index.html = écran hôte/plateau → affiche la vue plateau TV
+    // drawQ_host montre la question + scores sans les boutons joueur
     if      (gs.phase==="roundIntro") drawIntro(room,gs);
-    else if (gs.phase==="question")   drawQ(room,gs);
+    else if (gs.phase==="question")   drawQ_host(room,gs);
     else if (gs.phase==="scoreboard") drawScore(room,gs,false);
     else if (gs.phase==="final")      drawScore(room,gs,true);
   });
