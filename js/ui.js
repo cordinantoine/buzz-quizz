@@ -23,13 +23,6 @@ const val = id => $(id)?.value || "";
 const set = (id, t) => { const e = $(id); if (e) e.textContent = t; };
 function R(h) { A.innerHTML = h; }
 
-// ── Firebase renvoie les arrays comme objets {0:{...},1:{...}} ──
-// Ce helper normalise toujours en vrai array JS
-const toArr = v => {
-  if (!v) return [];
-  if (Array.isArray(v)) return v;
-  return Object.keys(v).sort((a,b)=>+a-+b).map(k => v[k]);
-};
 
 // ── Change le thème visuel (3D + étoiles CSS) ──
 function setBG(tid) {
